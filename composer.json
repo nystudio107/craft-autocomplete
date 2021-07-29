@@ -1,0 +1,35 @@
+{
+    "name": "nystudio107/craft-autocomplete",
+    "description": "Provides Twig template IDE autocomplete of Craft CMS & plugin variables",
+    "type": "yii2-extension",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "autocomplete"
+    ],
+    "support": {
+        "docs": "https://github.com/nystudio107/craft-autocomplete/blob/master/README.md",
+        "issues": "https://github.com/nystudio107/craft-autocomplete/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "nystudio107",
+            "homepage": "https://nystudio107.com"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+          "nystudio107\\autocomplete\\": "src/"
+        }
+    },
+    "extra": {
+        "bootstrap": "nystudio107\\autocomplete\\Autocomplete"
+    }
+}
