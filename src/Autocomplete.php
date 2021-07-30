@@ -14,6 +14,7 @@ use Craft;
 use craft\console\Application as CraftConsoleApp;
 use craft\services\Plugins;
 use craft\web\Application as CraftWebApp;
+use craft\web\twig\variables\CraftVariable;
 use yii\base\Application as YiiApp;
 use yii\base\BootstrapInterface;
 use yii\base\Component;
@@ -46,6 +47,9 @@ class Autocomplete extends Component implements BootstrapInterface
         }
 
         $this->registerEventHandlers();
+
+        // TODO: remove after testing
+        $this->generateAutocompleteVariable();
     }
 
     /**
@@ -56,8 +60,6 @@ class Autocomplete extends Component implements BootstrapInterface
         Event::on(Plugins::class,Plugins::EVENT_AFTER_INSTALL_PLUGIN, [$this, 'generateAutocompleteVariable']);
         Event::on(Plugins::class,Plugins::EVENT_AFTER_UNINSTALL_PLUGIN, [$this, 'generateAutocompleteVariable']);
         Craft::info('Event Handlers installed',__METHOD__);
-
-
     }
 
     /**
@@ -65,6 +67,42 @@ class Autocomplete extends Component implements BootstrapInterface
      */
     public function generateAutocompleteVariable()
     {
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_LOAD_PLUGINS, function() {
+            $globals = Craft::$app->view->getTwig()->getGlobals();
+
+            /** @var CraftVariable $craftVariable */
+            $craftVariable = $globals['craft'];
+
+            $output = [];
+
+            foreach ($globals as $key => $value) {
+                if (is_bool($value)) {
+                    $output['globals'][$key] = 'bool';
+                }
+                elseif (is_string($value)) {
+                    $output['globals'][$key] = 'string';
+                }
+                elseif (is_int($value)) {
+                    $output['globals'][$key] = 'int';
+                }
+                elseif (is_object($value)) {
+                    $output['globals'][$key] = get_class($value);
+                }
+            }
+
+            foreach ($craftVariable->getComponents() as $key => $value) {
+                if (is_object($value)) {
+                    $output['components'][$key] = get_class($value);
+                }
+                else {
+                    $output['components'][$key] = $value;
+                }
+            }
+
+            Craft::dd($output);
+        });
+
+
         Craft::info('Autocomplete variable generated',__METHOD__);
     }
 }
