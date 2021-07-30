@@ -40,7 +40,7 @@ class Autocomplete extends Component implements BootstrapInterface
             return;
         }
 
-        // Make sure it's not in devMode
+        // Make sure we're in devMode
         if (!Craft::$app->config->general->devMode) {
             return;
         }
@@ -56,6 +56,8 @@ class Autocomplete extends Component implements BootstrapInterface
         Event::on(Plugins::class,Plugins::EVENT_AFTER_INSTALL_PLUGIN, [$this, 'generateAutocompleteVariable']);
         Event::on(Plugins::class,Plugins::EVENT_AFTER_UNINSTALL_PLUGIN, [$this, 'generateAutocompleteVariable']);
         Craft::info('Event Handlers installed',__METHOD__);
+
+
     }
 
     /**
