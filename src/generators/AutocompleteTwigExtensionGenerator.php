@@ -11,16 +11,17 @@
 namespace nystudio107\autocomplete\generators;
 
 use nystudio107\autocomplete\base\Generator;
+use nystudio107\autocomplete\helpers\TypeHelper;
 
 use Craft;
-use nystudio107\autocomplete\helpers\TypeHelper;
+use craft\web\twig\variables\CraftVariable;
 
 /**
  * @author    nystudio107
  * @package   autocomplete
  * @since     1.0.0
  */
-class AutocompleteVariableGenerator extends Generator
+class AutocompleteTwigExtensionGenerator extends Generator
 {
     // Public Static Methods
     // =========================================================================
@@ -32,12 +33,20 @@ class AutocompleteVariableGenerator extends Generator
     {
         parent::generate();
 
-        $variables = [];
+        $components = [];
         $globals = Craft::$app->view->getTwig()->getGlobals();
-        foreach ($globals as $key => $value) {
-            $type = TypeHelper::getType($value);
-            if ($type) {
-                $variables[$key] = $type;
+        /** @var CraftVariable $craftVariable */
+        if (isset($globals['craft'])) {
+            $craftVariable = $globals['craft'];
+            foreach ($craftVariable->getComponents() as $key => $value) {
+                $type = TypeHelper::getType($value);
+                if ($type) {
+                    if ($type === 'string') {
+                        $components[$key] = $value;
+                    } else {
+                        $components[$key] = $type;
+                    }
+                }
             }
         }
     }

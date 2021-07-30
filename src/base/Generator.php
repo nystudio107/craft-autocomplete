@@ -22,10 +22,10 @@ abstract class Generator implements GeneratorInterface
 
     use GeneratorTrait;
 
-    // Public Methods
+    // Public Static Methods
     // =========================================================================
 
-    public function generate()
+    public static function generate()
     {
     }
 }

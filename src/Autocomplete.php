@@ -10,11 +10,16 @@
 
 namespace nystudio107\autocomplete;
 
+use nystudio107\autocomplete\generators\AutocompleteTwigExtensionGenerator;
+use nystudio107\autocomplete\generators\AutocompleteVariableGenerator;
+use nystudio107\autocomplete\base\Generator;
+
 use Craft;
 use craft\console\Application as CraftConsoleApp;
+use craft\events\RegisterComponentTypesEvent;
 use craft\services\Plugins;
 use craft\web\Application as CraftWebApp;
-use craft\web\twig\variables\CraftVariable;
+
 use yii\base\Application as YiiApp;
 use yii\base\BootstrapInterface;
 use yii\base\Component;
@@ -29,6 +34,39 @@ use yii\base\Event;
  */
 class Autocomplete extends Component implements BootstrapInterface
 {
+    // Constants
+    // =========================================================================
+
+    /**
+     * @event RegisterComponentTypesEvent The event that is triggered when registering
+     *        Autocomplete Generator types
+     *
+     * Autocomplete Generator types must implement [[GeneratorInterface]]. [[Generator]]
+     * provides a base implementation.
+     *
+     * ```php
+     * use nystudio107\autocomplete\Autocomplete;
+     * use craft\events\RegisterComponentTypesEvent;
+     * use yii\base\Event;
+     *
+     * Event::on(Autocomplete::class,
+     *     Autocomplete::EVENT_REGISTER_AUTOCOMPLETE_GENERATORS,
+     *     function(RegisterComponentTypesEvent $event) {
+     *         $event->types[] = MyAutocompleteGenerator::class;
+     *     }
+     * );
+     * ```
+     */
+    const EVENT_REGISTER_AUTOCOMPLETE_GENERATORS = 'registerAutocompleteGenerators';
+
+    const DEFAULT_AUTOCOMPLETE_GENERATORS = [
+        AutocompleteVariableGenerator::class,
+        AutocompleteTwigExtensionGenerator::class,
+    ];
+
+    // Public Methods
+    // =========================================================================
+
     /**
      * Bootstraps the extension
      *
@@ -40,16 +78,12 @@ class Autocomplete extends Component implements BootstrapInterface
         if (!($app instanceof CraftWebApp || $app instanceof CraftConsoleApp)) {
             return;
         }
-
         // Make sure we're in devMode
         if (!Craft::$app->config->general->devMode) {
             return;
         }
-
+        // Register our event handlers
         $this->registerEventHandlers();
-
-        // TODO: remove after testing
-        $this->generateAutocompleteVariable();
     }
 
     /**
@@ -57,52 +91,45 @@ class Autocomplete extends Component implements BootstrapInterface
      */
     public function registerEventHandlers()
     {
-        Event::on(Plugins::class,Plugins::EVENT_AFTER_INSTALL_PLUGIN, [$this, 'generateAutocompleteVariable']);
-        Event::on(Plugins::class,Plugins::EVENT_AFTER_UNINSTALL_PLUGIN, [$this, 'generateAutocompleteVariable']);
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_INSTALL_PLUGIN, [$this, 'generateAutocompleteTemplates']);
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_UNINSTALL_PLUGIN, [$this, 'generateAutocompleteTemplates']);
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_LOAD_PLUGINS, [$this, 'generateAutocompleteTemplates']);
         Craft::info('Event Handlers installed',__METHOD__);
     }
 
     /**
-     * Generates the autocomplete variable
+     * Call each of the autocomplete generator classes to tell them to generator their templates
      */
-    public function generateAutocompleteVariable()
+    public function generateAutocompleteTemplates()
     {
-        Event::on(Plugins::class,Plugins::EVENT_AFTER_LOAD_PLUGINS, function() {
-            $globals = Craft::$app->view->getTwig()->getGlobals();
-
-            /** @var CraftVariable $craftVariable */
-            $craftVariable = $globals['craft'];
-
-            $output = [];
-
-            foreach ($globals as $key => $value) {
-                if (is_bool($value)) {
-                    $output['globals'][$key] = 'bool';
-                }
-                elseif (is_string($value)) {
-                    $output['globals'][$key] = 'string';
-                }
-                elseif (is_int($value)) {
-                    $output['globals'][$key] = 'int';
-                }
-                elseif (is_object($value)) {
-                    $output['globals'][$key] = get_class($value);
-                }
-            }
-
-            foreach ($craftVariable->getComponents() as $key => $value) {
-                if (is_object($value)) {
-                    $output['components'][$key] = get_class($value);
-                }
-                else {
-                    $output['components'][$key] = $value;
-                }
-            }
-
-            Craft::dd($output);
-        });
-
-
-        Craft::info('Autocomplete variable generated',__METHOD__);
+        $autocompleteGenerators = $this->getAllAutocompleteGenerators();
+        foreach($autocompleteGenerators as $generatorClass) {
+            /** @var Generator $generatorClass */
+            $generatorClass::generate();
+        }
+        Craft::info('Autocomplete templates generated',__METHOD__);
     }
+
+    // Protected Methods
+    // =========================================================================
+
+    /**
+     * Returns all available autocomplete generator classes.
+     *
+     * @return string[] The available autocomplete generator classes
+     */
+    public function getAllAutocompleteGenerators(): array
+    {
+        $autocompleteGenerators = array_unique(array_merge(
+            self::DEFAULT_AUTOCOMPLETE_GENERATORS
+        ), SORT_REGULAR);
+
+        $event = new RegisterComponentTypesEvent([
+            'types' => $autocompleteGenerators
+        ]);
+        $this->trigger(self::EVENT_REGISTER_AUTOCOMPLETE_GENERATORS, $event);
+
+        return $event->types;
+    }
+
 }

@@ -17,6 +17,6 @@ namespace nystudio107\autocomplete\base;
  */
 trait GeneratorTrait
 {
-    // Properties
+    // Static Properties
     // =========================================================================
 }
