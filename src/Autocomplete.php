@@ -14,7 +14,6 @@ use Craft;
 use craft\console\Application as CraftConsoleApp;
 use craft\services\Plugins;
 use craft\web\Application as CraftWebApp;
-
 use yii\base\Application as YiiApp;
 use yii\base\BootstrapInterface;
 use yii\base\Component;
@@ -29,34 +28,8 @@ use yii\base\Event;
  */
 class Autocomplete extends Component implements BootstrapInterface
 {
-    // Public Static Methods
-    // =========================================================================
-
     /**
-     * Class autoloader.
-     *
-     * @param string $className
-     */
-    public static function autoload(string $className)
-    {
-        if ($className === Autocomplete::class) {
-            self::generateAutocompleteVariable();
-        }
-    }
-
-    /**
-     *
-     */
-    public static function generateAutocompleteVariable()
-    {
-        Craft::info('Autocomplete variable generated',__METHOD__);
-    }
-
-    // Public Methods
-    // =========================================================================
-
-    /**
-     * Bootstrap the extension
+     * Bootstraps the extension
      *
      * @param YiiApp $app
      */
@@ -67,22 +40,29 @@ class Autocomplete extends Component implements BootstrapInterface
             return;
         }
 
-        $this->installEventHandlers();
+        // Make sure it's not in devMode
+        if (!Craft::$app->config->general->devMode) {
+            return;
+        }
+
+        $this->registerEventHandlers();
     }
 
     /**
-     * Install our event handlers
+     * Registers our event handlers
      */
-    public function installEventHandlers()
+    public function registerEventHandlers()
     {
-        Event::on(Plugins::class,Plugins::EVENT_AFTER_INSTALL_PLUGIN, [__CLASS__, 'generateAutocompleteVariable']);
-        Event::on(Plugins::class,Plugins::EVENT_AFTER_UNINSTALL_PLUGIN, [__CLASS__, 'generateAutocompleteVariable']);
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_INSTALL_PLUGIN, [$this, 'generateAutocompleteVariable']);
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_UNINSTALL_PLUGIN, [$this, 'generateAutocompleteVariable']);
         Craft::info('Event Handlers installed',__METHOD__);
     }
 
-    // Protected Methods
-    // =========================================================================
-
+    /**
+     * Generates the autocomplete variable
+     */
+    public function generateAutocompleteVariable()
+    {
+        Craft::info('Autocomplete variable generated',__METHOD__);
+    }
 }
-
-spl_autoload_register([Autocomplete::class, 'autoload'], true, true);

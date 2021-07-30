@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2021 nystudio107
  */
 
-namespace nystudio107\autocomplete\base;
+namespace nystudio107\autocomplete\generators;
 
 use nystudio107\autocomplete\base\Generator;
 
