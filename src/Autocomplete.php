@@ -10,9 +10,10 @@
 
 namespace nystudio107\autocomplete;
 
+use nystudio107\autocomplete\base\Generator;
+use nystudio107\autocomplete\console\controllers\AutocompleteController;
 use nystudio107\autocomplete\generators\AutocompleteTwigExtensionGenerator;
 use nystudio107\autocomplete\generators\AutocompleteVariableGenerator;
-use nystudio107\autocomplete\base\Generator;
 
 use Craft;
 use craft\console\Application as CraftConsoleApp;
@@ -31,6 +32,8 @@ use yii\base\Event;
  * @author    nystudio107
  * @package   Autocomplete
  * @since     1.0.0
+ *
+ * @property-read string[] $allAutocompleteGenerators
  */
 class Autocomplete extends Component implements BootstrapInterface
 {
@@ -84,6 +87,10 @@ class Autocomplete extends Component implements BootstrapInterface
         }
         // Register our event handlers
         $this->registerEventHandlers();
+
+        if (Craft::$app->request->isConsoleRequest) {
+            Craft::$app->controllerMap['autocomplete'] = AutocompleteController::class;
+        }
     }
 
     /**
@@ -98,7 +105,7 @@ class Autocomplete extends Component implements BootstrapInterface
     }
 
     /**
-     * Call each of the autocomplete generator classes to tell them to generator their templates
+     * Call each of the autocomplete generator classes to tell them to generate their templates
      */
     public function generateAutocompleteTemplates()
     {
