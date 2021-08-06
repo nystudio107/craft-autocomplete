@@ -16,19 +16,17 @@ use yii\console\Controller;
 use yii\console\ExitCode;
 
 /**
- * Manages autocomplete.
+ * Manages autocomplete templates.
  */
 class AutocompleteController extends Controller
 {
     /**
      * Regenerates all autocomplete templates.
      */
-    public function actionRegenerate()
+    public function actionRegenerate(): int
     {
         $this->stdout('Regenerating all autocomplete templates ... ', Console::FG_YELLOW);
-
         Autocomplete::getInstance()->generateAutocompleteTemplates();
-
         $this->stdout('done' . PHP_EOL, Console::FG_GREEN);
 
         return ExitCode::OK;

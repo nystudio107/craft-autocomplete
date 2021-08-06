@@ -23,8 +23,8 @@ use craft\web\Application as CraftWebApp;
 
 use yii\base\Application as YiiApp;
 use yii\base\BootstrapInterface;
-use yii\base\Component;
 use yii\base\Event;
+use yii\base\Module;
 
 /**
  * Class Autocomplete
@@ -35,7 +35,7 @@ use yii\base\Event;
  *
  * @property-read string[] $allAutocompleteGenerators
  */
-class Autocomplete extends Component implements BootstrapInterface
+class Autocomplete extends Module implements BootstrapInterface
 {
     // Constants
     // =========================================================================
@@ -85,6 +85,11 @@ class Autocomplete extends Component implements BootstrapInterface
         if (!Craft::$app->config->general->devMode) {
             return;
         }
+
+        // Set the currently requested instance of this module class,
+        // so we can later access it with `Autocomplete::getInstance()`
+        static::setInstance($this);
+
         // Register our event handlers
         $this->registerEventHandlers();
 
