@@ -62,16 +62,13 @@ class AutocompleteTwigExtensionGenerator extends Generator
                     $globalsText.= "        '{$key}' => new \\{$className}()," . PHP_EOL;
                     break;
 
-                case 'string':
-                    $globalsText.= "        '{$key}' => '{$value}'," . PHP_EOL;
-                    break;
-
                 case 'array':
                 case 'unknown type':
                     break;
 
+                case 'string':
                 default:
-                    $globalsText.= "        '{$key}' => {$value}," . PHP_EOL;
+                    $globalsText.= "        '{$key}' => '{$value}'," . PHP_EOL;
                     break;
             }
         }
