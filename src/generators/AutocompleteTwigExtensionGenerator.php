@@ -41,9 +41,8 @@ class AutocompleteTwigExtensionGenerator extends Generator
      */
     public static function generate()
     {
-        if (self::shouldRegenerateFile()) {
-            static::regenerate();
-        }
+        // We always regenerate, to be context-sensitive based on the last page that was loaded/rendered
+        static::regenerate();
     }
 
     /**
@@ -53,7 +52,10 @@ class AutocompleteTwigExtensionGenerator extends Generator
     {
         $values = [];
         /** @noinspection PhpInternalEntityUsedInspection */
-        $globals = Craft::$app->view->getTwig()->getGlobals();
+        $globals = array_merge(
+            Craft::$app->view->getTwig()->getGlobals(),
+            Craft::$app->controller->actionParams['variables'] ?? [],
+        );
         foreach ($globals as $key => $value) {
             $type = gettype($value);
             switch ($type) {
@@ -86,20 +88,6 @@ class AutocompleteTwigExtensionGenerator extends Generator
                 case 'NULL':
                     $values[$key] = 'null';
                     break;
-            }
-        }
-
-        // Ensure a current user is set
-        $values['currentUser'] = 'new \\'.User::class.'()';
-
-        // Add element types using their ref handle as the key
-        $elementTypes = Craft::$app->elements->getAllElementTypes();
-        foreach ($elementTypes as $elementType) {
-            /** @var ElementInterface $element */
-            $element = new $elementType();
-            $key = $element::refHandle();
-            if (!empty($key)) {
-                $values[$key] = 'new \\'.$elementType.'()';
             }
         }
 
