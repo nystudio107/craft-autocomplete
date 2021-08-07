@@ -47,7 +47,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
      */
     public static function regenerate(): void
     {
-        $globalsArray = [];
+        $values = [];
         /** @noinspection PhpInternalEntityUsedInspection */
         $globals = Craft::$app->view->getTwig()->getGlobals();
         foreach ($globals as $key => $value) {
@@ -59,39 +59,39 @@ class AutocompleteTwigExtensionGenerator extends Generator
                     if ($key === 'craft') {
                         $className = 'nystudio107\autocomplete\variables\AutocompleteVariable';
                     }
-                    $globalsArray[$key] = "new \\$className()";
+                    $values[$key] = "new \\$className()";
                     break;
 
                 case 'boolean':
-                    $globalsArray[$key] = $value ? "true" : "false";
+                    $values[$key] = $value ? "true" : "false";
                     break;
 
                 case 'integer':
                 case 'double':
-                    $globalsArray[$key] = "$value";
+                    $values[$key] = "$value";
                     break;
 
                 case 'string':
-                    $globalsArray[$key] = "'$value'";
+                    $values[$key] = "'$value'";
                     break;
 
                 case 'array':
-                    $globalsArray[$key] = "[]";
+                    $values[$key] = "[]";
                     break;
 
                 case 'NULL':
-                    $globalsArray[$key] = "null";
+                    $values[$key] = "null";
                     break;
             }
         }
 
-        foreach ($globalsArray as $key => $value) {
-            $globalsArray[$key] = "            '$key' => $value,";
+        foreach ($values as $key => $value) {
+            $values[$key] = "            '$key' => $value,";
         }
 
         // Save the template with variable substitution
         self::saveTemplate([
-            '{{ globals }}' => implode(PHP_EOL, $globalsArray),
+            '{{ globals }}' => implode(PHP_EOL, $values),
         ]);
     }
 }
