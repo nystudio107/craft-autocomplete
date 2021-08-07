@@ -1,15 +1,15 @@
-# Autocomplete for Craft CMS 3.x
-
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/nystudio107/craft-autocomplete/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/nystudio107/craft-autocomplete/?branch=develop) [![Code Coverage](https://scrutinizer-ci.com/g/nystudio107/craft-autocomplete/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/nystudio107/craft-autocomplete/?branch=develop) [![Build Status](https://scrutinizer-ci.com/g/nystudio107/craft-autocomplete/badges/build.png?b=develop)](https://scrutinizer-ci.com/g/nystudio107/craft-autocomplete/build-status/develop) [![Code Intelligence Status](https://scrutinizer-ci.com/g/nystudio107/craft-autocomplete/badges/code-intelligence.svg?b=develop)](https://scrutinizer-ci.com/code-intelligence)
+
+# Autocomplete for Craft CMS 3.x
 
 Provides Twig template IDE autocompletion for Craft CMS and plugin/module variables.
 
 Works with PhpStorm provided the [Symfony Support plugin](https://plugins.jetbrains.com/plugin/7219-symfony-plugin
 ) is installed. VSCode currently does not support intellisense for Twig extensions.
 
-> ![demo](https://user-images.githubusercontent.com/57572400/126911028-7d7d06dd-c60f-42b9-ae42-95d5f078a229.gif)
-
 > While Craft [3.7.8](https://github.com/craftcms/cms/blob/develop/CHANGELOG.md#378---2021-08-06) added autocompletion for Craft’s global Twig variables, this does not include autocompletion for plugins and modules that provide their own variables.
+
+![demo](https://user-images.githubusercontent.com/57572400/126911028-7d7d06dd-c60f-42b9-ae42-95d5f078a229.gif)
 
 ## Requirements
 
