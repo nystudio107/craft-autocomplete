@@ -111,7 +111,7 @@ class Autocomplete extends Module implements BootstrapInterface
     {
         Event::on(Plugins::class,Plugins::EVENT_AFTER_INSTALL_PLUGIN, [$this, 'regenerateAutocompleteTemplates']);
         Event::on(Plugins::class,Plugins::EVENT_AFTER_UNINSTALL_PLUGIN, [$this, 'regenerateAutocompleteTemplates']);
-        Event::on(Plugins::class,Plugins::EVENT_AFTER_LOAD_PLUGINS, [$this, 'generateAutocompleteTemplates']);
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_LOAD_PLUGINS, [$this, 'regenerateAutocompleteTemplates']);
         Craft::info('Event Handlers installed',__METHOD__);
     }
 

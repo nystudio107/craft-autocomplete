@@ -28,11 +28,28 @@ class AutocompleteTwigExtensionGenerator extends Generator
     /**
      * @inheritDoc
      */
-    public static function generate()
+    public static function getGeneratorName(): string
     {
-        parent::generate();
+        return 'AutocompleteTwigExtension';
+    }
 
+    /**
+     * @inheritDoc
+     */
+    public static function generate(): void
+    {
+        if (self::shouldRegenerateFile()) {
+            static::regenerate();
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function regenerate(): void
+    {
         $components = [];
+        /** @noinspection PhpInternalEntityUsedInspection */
         $globals = Craft::$app->view->getTwig()->getGlobals();
         /** @var CraftVariable $craftVariable */
         if (isset($globals['craft'])) {
@@ -48,5 +65,10 @@ class AutocompleteTwigExtensionGenerator extends Generator
                 }
             }
         }
+
+        // Save the template with variable substitution
+        $vars = [
+        ];
+        self::saveTemplate($vars);
     }
 }

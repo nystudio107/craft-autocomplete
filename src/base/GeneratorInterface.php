@@ -21,8 +21,19 @@ interface GeneratorInterface
     // Constants
     // =========================================================================
 
+    public const TEMPLATE_EXTENSION = '.php';
+    public const STUBS_EXTENSION = '.stub.php';
+    public const STUBS_DIR = DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR;
+
     // Public Static Methods
     // =========================================================================
+
+    /**
+     * Return the name of the generator
+     *
+     * @return string
+     */
+    public static function getGeneratorName(): string;
 
     /**
      * Generate the auto-complete file if it doesn't exist already

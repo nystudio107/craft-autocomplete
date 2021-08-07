@@ -27,11 +27,28 @@ class AutocompleteVariableGenerator extends Generator
     /**
      * @inheritDoc
      */
-    public static function generate()
+    public static function getGeneratorName(): string
     {
-        parent::generate();
+        return 'AutocompleteVariable';
+    }
 
+    /**
+     * @inheritDoc
+     */
+    public static function generate(): void
+    {
+        if (self::shouldRegenerateFile()) {
+            static::regenerate();
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function regenerate(): void
+    {
         $variables = [];
+        /** @noinspection PhpInternalEntityUsedInspection */
         $globals = Craft::$app->view->getTwig()->getGlobals();
         foreach ($globals as $key => $value) {
             $type = gettype($value);
@@ -39,5 +56,10 @@ class AutocompleteVariableGenerator extends Generator
                 $variables[$key] = $type;
             }
         }
+
+        // Save the template with variable substitution
+        $vars = [
+        ];
+        self::saveTemplate($vars);
     }
 }
