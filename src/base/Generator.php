@@ -81,7 +81,7 @@ abstract class Generator implements GeneratorInterface
     {
         $path = self::getGeneratedFilePath();
         if (is_file($path)) {
-            if (time() - filemtime($path) > 10) {
+            if (time() - filemtime($path) < 10) {
                 return false;
             }
         }
