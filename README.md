@@ -28,7 +28,11 @@ This plugin requires Craft CMS 3.0.0 or later.
     
 3. Ensure that `devMode` is enabled.
 
-Now whenever Craft is run, autocomplete classes will then automatically be generated for you if they don't exist already in `storage/runtime/compiled_classes/`
+4. Visit the Craft site on which the package is installed to generate the autocomplete classes in `storage/runtime/compiled_classes/` or run the following console command.
+
+```shell
+php craft autocomplete/generate
+```
 
 Once your IDE indexes the autocomplete classes, autocompletion for Craft and all plugins and modules will immediately become available in your Twig templates.
 
