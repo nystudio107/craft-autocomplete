@@ -13,7 +13,6 @@ namespace nystudio107\autocomplete\generators;
 use nystudio107\autocomplete\base\Generator;
 
 use Craft;
-use craft\web\twig\variables\CraftVariable;
 
 /**
  * @author    nystudio107
