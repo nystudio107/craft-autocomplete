@@ -85,15 +85,13 @@ class AutocompleteTwigExtensionGenerator extends Generator
             }
         }
 
-        $globalsText = '';
         foreach ($globalsArray as $key => $value) {
-            $globalsText .= "            '$key' => $value," . PHP_EOL;
+            $globalsArray[$key] = "            '$key' => $value,";
         }
 
         // Save the template with variable substitution
-        $vars = [
-            '{{ globals }}' => rtrim($globalsText, PHP_EOL),
-        ];
-        self::saveTemplate($vars);
+        self::saveTemplate([
+            '{{ globals }}' => implode(PHP_EOL, $globalsArray),
+        ]);
     }
 }

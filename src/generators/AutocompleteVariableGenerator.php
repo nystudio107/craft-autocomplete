@@ -70,16 +70,13 @@ class AutocompleteVariableGenerator extends Generator
             }
         }
 
-        $propertiesText = '';
         foreach ($propertiesArray as $key => $value) {
-            $propertiesText .= " * @property \\$value $$key" . PHP_EOL;
+            $propertiesArray[$key] = " * @property \\$value $$key";
         }
 
-
         // Save the template with variable substitution
-        $vars = [
-            '{{ properties }}' => rtrim($propertiesText, PHP_EOL),
-        ];
-        self::saveTemplate($vars);
+        self::saveTemplate([
+            '{{ properties }}' => implode(PHP_EOL, $propertiesArray),
+        ]);
     }
 }
