@@ -12,6 +12,7 @@
 
 namespace nystudio107\autocomplete\generators;
 
+use craft\base\ElementInterface;
 use craft\elements\User;
 use nystudio107\autocomplete\base\Generator;
 
@@ -58,41 +59,53 @@ class AutocompleteTwigExtensionGenerator extends Generator
             switch ($type) {
                 case 'object':
                     $className = get_class($value);
-                    // Swap in our variable in place of the 'craft' variable
+                    // Swap in our variable in place of the `craft` variable
                     if ($key === 'craft') {
                         $className = 'nystudio107\autocomplete\variables\AutocompleteVariable';
                     }
-                    $values[$key] = "new \\$className()";
+                    $values[$key] = 'new \\'.$className.'()';
                     break;
 
                 case 'boolean':
-                    $values[$key] = $value ? "true" : "false";
+                    $values[$key] = $value ? 'true' : 'false';
                     break;
 
                 case 'integer':
                 case 'double':
-                    $values[$key] = "$value";
+                    $values[$key] = $value;
                     break;
 
                 case 'string':
-                    $values[$key] = "'$value'";
+                    $values[$key] = '"'.$value.'"';
                     break;
 
                 case 'array':
-                    $values[$key] = "[]";
+                    $values[$key] = '[]';
                     break;
 
                 case 'NULL':
-                    $values[$key] = "null";
+                    $values[$key] = 'null';
                     break;
             }
         }
 
         // Ensure a current user is set
-        $values['currentUser'] = new User();
+        $values['currentUser'] = 'new \\'.User::class.'()';
 
+        // Add element types using their ref handle as the key
+        $elementTypes = Craft::$app->elements->getAllElementTypes();
+        foreach ($elementTypes as $elementType) {
+            /** @var ElementInterface $element */
+            $element = new $elementType();
+            $key = $element::refHandle();
+            if (!empty($key)) {
+                $values[$key] = 'new \\'.$elementType.'()';
+            }
+        }
+
+        // Format the line output for each value
         foreach ($values as $key => $value) {
-            $values[$key] = "            '$key' => $value,";
+            $values[$key] = '            "'.$key.'" => '.$value.',';
         }
 
         // Save the template with variable substitution
