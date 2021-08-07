@@ -203,9 +203,9 @@ public class GlobalExtensionVariableCollector implements TwigFileVariableCollect
 
 Once PhpStorm has indexed these two classes, autocompletion for Craft and all plugins and modules immediately becomes available in your Twig templates, just like magic!
 
-### Inspiration
+### Hat tip
 
-Hat tip to Oliver Stark for [ostark/craft-prompter](https://mobile.twitter.com/o_stark/status/1415743590005944328) for inspiration for Craft Autocomplete.
+Hat tip to Oliver Stark for his work on [ostark/craft-prompter](https://mobile.twitter.com/o_stark/status/1415743590005944328).
 
 ---
 
