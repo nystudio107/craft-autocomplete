@@ -26,7 +26,7 @@ This plugin requires Craft CMS 3.0.0 or later.
     
 3. Ensure that `devMode` is enabled.
 
-The autocomplete classes will then automatically be generated for you in `storage/runtime/compiled_classes/`
+Now whenever Craft is run, autocomplete classes will then automatically be generated for you if they don't exist already in `storage/runtime/compiled_classes/`
 
 Once your IDE indexes the autocomplete classes, autocompletion for Craft and all plugins and modules will immediately become available in your Twig templates.
 
@@ -238,6 +238,10 @@ public class GlobalExtensionVariableCollector implements TwigFileVariableCollect
 
 
 Once PhpStorm has indexed these two classes, autocompletion for Craft and all plugins and modules immediately becomes available in your Twig templates, just like magic!
+
+### Inspiration
+
+Hat tip to Oliver Stark for [ostark/craft-prompter](https://mobile.twitter.com/o_stark/status/1415743590005944328) for inspiration for Craft Autocomplete.
 
 ---
 
