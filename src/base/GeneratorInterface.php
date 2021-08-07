@@ -19,7 +19,6 @@ namespace nystudio107\autocomplete\base;
  */
 interface GeneratorInterface
 {
-
     // Constants
     // =========================================================================
 
