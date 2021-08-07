@@ -25,7 +25,7 @@ interface GeneratorInterface
 
     const TEMPLATE_EXTENSION = '.php';
     const STUBS_EXTENSION = '.php.stub';
-    const STUBS_DIR = DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR;
+    const STUBS_DIR = DIRECTORY_SEPARATOR . 'stubs';
 
     // Public Static Methods
     // =========================================================================
@@ -36,6 +36,13 @@ interface GeneratorInterface
      * @return string
      */
     public static function getGeneratorName(): string;
+
+    /**
+     * Return a file system path to the generator stubs directory
+     *
+     * @return string
+     */
+    public static function getGeneratorStubsPath(): string;
 
     /**
      * Generate the autocomplete class if it doesn't exist already

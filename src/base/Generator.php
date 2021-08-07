@@ -42,6 +42,14 @@ abstract class Generator implements GeneratorInterface
     /**
      * @inheritDoc
      */
+    public static function getGeneratorStubsPath(): string
+    {
+        return Autocomplete::getInstance()->basePath . self::STUBS_DIR;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public static function generate()
     {
     }
@@ -103,7 +111,7 @@ abstract class Generator implements GeneratorInterface
      */
     protected static function getStubFilePath(): string
     {
-        return Autocomplete::getInstance()->basePath . self::STUBS_DIR . static::getGeneratorName() . self::STUBS_EXTENSION;
+        return static::getGeneratorStubsPath() . DIRECTORY_SEPARATOR . static::getGeneratorName() . self::STUBS_EXTENSION;
     }
 
 }
