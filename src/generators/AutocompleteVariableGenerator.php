@@ -64,6 +64,12 @@ class AutocompleteVariableGenerator extends Generator
                         $values[$key] = $className;
                         break;
 
+                    case 'array':
+                        if (isset($value['class'])) {
+                            $values[$key] = $value['class'];
+                        }
+                        break;
+
                     case 'string':
                         $values[$key] = $value;
                         break;
