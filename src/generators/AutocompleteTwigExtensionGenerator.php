@@ -54,7 +54,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
         /** @noinspection PhpInternalEntityUsedInspection */
         $globals = array_merge(
             Craft::$app->view->getTwig()->getGlobals(),
-            Craft::$app->controller->actionParams['variables'] ?? [],
+            Craft::$app->controller->actionParams['variables'] ?? []
         );
         foreach ($globals as $key => $value) {
             $type = gettype($value);
