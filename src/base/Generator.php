@@ -23,11 +23,6 @@ use Craft;
  */
 abstract class Generator implements GeneratorInterface
 {
-    // Traits
-    // =========================================================================
-
-    use GeneratorTrait;
-
     // Public Static Methods
     // =========================================================================
 
