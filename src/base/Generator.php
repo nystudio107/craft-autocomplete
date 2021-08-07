@@ -55,10 +55,10 @@ abstract class Generator implements GeneratorInterface
     // =========================================================================
 
     /**
-     * Save the template to disk, with variable substituation
+     * Save the template to disk, with variable substitution
      *
      * @param array $vars key/value variables to be replaced in the stub
-     * @return bool Whether the template was successefully saved
+     * @return bool Whether the template was successfully saved
      */
     protected static function saveTemplate(array $vars): bool
     {

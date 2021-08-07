@@ -98,7 +98,7 @@ class Autocomplete extends Module implements BootstrapInterface
         // Register our event handlers
         $this->registerEventHandlers();
 
-        // Add our
+        // Add our console controller
         if (Craft::$app->request->isConsoleRequest) {
             Craft::$app->controllerMap['autocomplete'] = AutocompleteController::class;
         }
