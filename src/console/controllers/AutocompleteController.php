@@ -23,11 +23,23 @@ use yii\console\ExitCode;
 class AutocompleteController extends Controller
 {
     /**
+     * Generates all autocomplete classes that do not already exist.
+     */
+    public function actionGenerate(): int
+    {
+        $this->stdout('Generating autocomplete classes ... ', Console::FG_YELLOW);
+        Autocomplete::getInstance()->generateAutocompleteTemplates();
+        $this->stdout('done' . PHP_EOL, Console::FG_GREEN);
+
+        return ExitCode::OK;
+    }
+
+    /**
      * Regenerates all autocomplete classes.
      */
     public function actionRegenerate(): int
     {
-        $this->stdout('Regenerating all autocomplete classes ... ', Console::FG_YELLOW);
+        $this->stdout('Regenerating autocomplete classes ... ', Console::FG_YELLOW);
         Autocomplete::getInstance()->regenerateAutocompleteTemplates();
         $this->stdout('done' . PHP_EOL, Console::FG_GREEN);
 
