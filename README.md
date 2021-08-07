@@ -1,5 +1,7 @@
 # Autocomplete for Craft CMS 3.x
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/nystudio107/craft-autocomplete/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/nystudio107/craft-autocomplete/?branch=develop) [![Code Coverage](https://scrutinizer-ci.com/g/nystudio107/craft-autocomplete/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/nystudio107/craft-autocomplete/?branch=develop) [![Build Status](https://scrutinizer-ci.com/g/nystudio107/craft-autocomplete/badges/build.png?b=develop)](https://scrutinizer-ci.com/g/nystudio107/craft-autocomplete/build-status/develop) [![Code Intelligence Status](https://scrutinizer-ci.com/g/nystudio107/craft-autocomplete/badges/code-intelligence.svg?b=develop)](https://scrutinizer-ci.com/code-intelligence)
+
 Provides Twig template IDE autocompletion for Craft CMS and plugin/module variables.
 
 Works with PhpStorm provided the [Symfony Support plugin](https://plugins.jetbrains.com/plugin/7219-symfony-plugin
