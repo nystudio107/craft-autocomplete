@@ -11,7 +11,6 @@
 namespace nystudio107\autocomplete\generators;
 
 use nystudio107\autocomplete\base\Generator;
-use nystudio107\autocomplete\helpers\TypeHelper;
 
 use Craft;
 use craft\web\twig\variables\CraftVariable;
@@ -39,7 +38,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
         if (isset($globals['craft'])) {
             $craftVariable = $globals['craft'];
             foreach ($craftVariable->getComponents() as $key => $value) {
-                $type = TypeHelper::getType($value);
+                $type = gettype($value);
                 if ($type) {
                     if ($type === 'string') {
                         $components[$key] = $value;

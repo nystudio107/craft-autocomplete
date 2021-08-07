@@ -13,7 +13,6 @@ namespace nystudio107\autocomplete\generators;
 use nystudio107\autocomplete\base\Generator;
 
 use Craft;
-use nystudio107\autocomplete\helpers\TypeHelper;
 
 /**
  * @author    nystudio107
@@ -35,7 +34,7 @@ class AutocompleteVariableGenerator extends Generator
         $variables = [];
         $globals = Craft::$app->view->getTwig()->getGlobals();
         foreach ($globals as $key => $value) {
-            $type = TypeHelper::getType($value);
+            $type = gettype($value);
             if ($type) {
                 $variables[$key] = $type;
             }
