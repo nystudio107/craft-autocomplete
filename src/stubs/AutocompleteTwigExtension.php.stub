@@ -9,8 +9,8 @@ class AutocompleteTwigExtension extends \Twig\Extension\AbstractExtension implem
 {
     public function getGlobals(): array
     {
-    return [
-        // Generated
+        return [
+            // Generated
 {{ globals }}
         ];
     }

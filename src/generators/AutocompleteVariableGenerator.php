@@ -48,7 +48,7 @@ class AutocompleteVariableGenerator extends Generator
      */
     public static function regenerate(): void
     {
-        $propertiesText = '';
+        $propertiesArray = [];
         /** @noinspection PhpInternalEntityUsedInspection */
         $globals = Craft::$app->view->getTwig()->getGlobals();
         /** @var CraftVariable $craftVariable */
@@ -57,18 +57,24 @@ class AutocompleteVariableGenerator extends Generator
             foreach ($craftVariable->getComponents() as $key => $value) {
                 $type = gettype($value);
                 switch ($type) {
-                    case 'string':
-                        $propertiesText .= " * @property \\{$value} \${$key}" . PHP_EOL;
-                        break;
-
                     case 'object':
                         $className = get_class($value);
-                        $propertiesText .= " * @property \\{$className} \${$key}" . PHP_EOL;
+                        $propertiesArray[$key] = $className;
+                        break;
+
+                    case 'string':
+                        $propertiesArray[$key] = $value;
                         break;
                 }
 
             }
         }
+
+        $propertiesText = '';
+        foreach ($propertiesArray as $key => $value) {
+            $propertiesText .= " * @property \\$value $$key" . PHP_EOL;
+        }
+
 
         // Save the template with variable substitution
         $vars = [
