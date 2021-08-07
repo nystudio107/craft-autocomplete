@@ -23,11 +23,6 @@ use Craft;
  */
 abstract class Generator implements GeneratorInterface
 {
-    // Traits
-    // =========================================================================
-
-    use GeneratorTrait;
-
     // Public Static Methods
     // =========================================================================
 
@@ -37,6 +32,14 @@ abstract class Generator implements GeneratorInterface
     public static function getGeneratorName(): string
     {
         return '';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function getGeneratorStubsPath(): string
+    {
+        return Autocomplete::getInstance()->basePath . self::STUBS_DIR;
     }
 
     /**
@@ -103,7 +106,7 @@ abstract class Generator implements GeneratorInterface
      */
     protected static function getStubFilePath(): string
     {
-        return Autocomplete::getInstance()->basePath . self::STUBS_DIR . static::getGeneratorName() . self::STUBS_EXTENSION;
+        return static::getGeneratorStubsPath() . DIRECTORY_SEPARATOR . static::getGeneratorName() . self::STUBS_EXTENSION;
     }
 
 }
