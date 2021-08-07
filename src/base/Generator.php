@@ -40,14 +40,14 @@ abstract class Generator implements GeneratorInterface
     /**
      * @inheritDoc
      */
-    public static function generate(): void
+    public static function generate()
     {
     }
 
     /**
      * @inheritDoc
      */
-    public static function regenerate(): void
+    public static function regenerate()
     {
     }
 

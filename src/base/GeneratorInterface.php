@@ -21,9 +21,9 @@ interface GeneratorInterface
     // Constants
     // =========================================================================
 
-    public const TEMPLATE_EXTENSION = '.php';
-    public const STUBS_EXTENSION = '.php.stub';
-    public const STUBS_DIR = DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR;
+    const TEMPLATE_EXTENSION = '.php';
+    const STUBS_EXTENSION = '.php.stub';
+    const STUBS_DIR = DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR;
 
     // Public Static Methods
     // =========================================================================
@@ -38,10 +38,10 @@ interface GeneratorInterface
     /**
      * Generate the autocomplete class if it doesn't exist already
      */
-    public static function generate(): void;
+    public static function generate();
 
     /**
      * Regenerate the autocomplete classes from scratch
      */
-    public static function regenerate(): void;
+    public static function regenerate();
 }

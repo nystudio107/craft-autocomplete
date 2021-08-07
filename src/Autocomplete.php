@@ -60,9 +60,9 @@ class Autocomplete extends Module implements BootstrapInterface
      * );
      * ```
      */
-    public const EVENT_REGISTER_AUTOCOMPLETE_GENERATORS = 'registerAutocompleteGenerators';
+    const EVENT_REGISTER_AUTOCOMPLETE_GENERATORS = 'registerAutocompleteGenerators';
 
-    public const DEFAULT_AUTOCOMPLETE_GENERATORS = [
+    const DEFAULT_AUTOCOMPLETE_GENERATORS = [
         AutocompleteVariableGenerator::class,
         AutocompleteTwigExtensionGenerator::class,
     ];
@@ -80,7 +80,7 @@ class Autocomplete extends Module implements BootstrapInterface
      *
      * @param YiiApp $app
      */
-    public function bootstrap($app): void
+    public function bootstrap($app)
     {
         // Make sure it's Craft
         if (!($app instanceof CraftWebApp || $app instanceof CraftConsoleApp)) {
@@ -107,7 +107,7 @@ class Autocomplete extends Module implements BootstrapInterface
     /**
      * Registers our event handlers
      */
-    public function registerEventHandlers(): void
+    public function registerEventHandlers()
     {
         Event::on(Plugins::class,Plugins::EVENT_AFTER_INSTALL_PLUGIN, [$this, 'regenerateAutocompleteTemplates']);
         Event::on(Plugins::class,Plugins::EVENT_AFTER_UNINSTALL_PLUGIN, [$this, 'regenerateAutocompleteTemplates']);
@@ -118,7 +118,7 @@ class Autocomplete extends Module implements BootstrapInterface
     /**
      * Call each of the autocomplete generator classes to tell them to generate their templates if they don't exist already
      */
-    public function generateAutocompleteTemplates(): void
+    public function generateAutocompleteTemplates()
     {
         $autocompleteGenerators = $this->getAllAutocompleteGenerators();
         foreach($autocompleteGenerators as $generatorClass) {
@@ -131,7 +131,7 @@ class Autocomplete extends Module implements BootstrapInterface
     /**
      * Call each of the autocomplete generator classes to tell them to regenerate their templates from scratch
      */
-    public function regenerateAutocompleteTemplates(): void
+    public function regenerateAutocompleteTemplates()
     {
         $autocompleteGenerators = $this->getAllAutocompleteGenerators();
         foreach($autocompleteGenerators as $generatorClass) {

@@ -35,7 +35,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
     /**
      * @inheritDoc
      */
-    public static function generate(): void
+    public static function generate()
     {
         if (self::shouldRegenerateFile()) {
             static::regenerate();
@@ -45,7 +45,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
     /**
      * @inheritDoc
      */
-    public static function regenerate(): void
+    public static function regenerate()
     {
         $values = [];
         /** @noinspection PhpInternalEntityUsedInspection */
