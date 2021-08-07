@@ -13,6 +13,7 @@ namespace nystudio107\autocomplete\generators;
 use nystudio107\autocomplete\base\Generator;
 
 use Craft;
+use craft\web\twig\variables\CraftVariable;
 
 /**
  * @author    nystudio107
@@ -47,18 +48,31 @@ class AutocompleteVariableGenerator extends Generator
      */
     public static function regenerate(): void
     {
-        $variables = [];
+        $propertiesText = '';
         /** @noinspection PhpInternalEntityUsedInspection */
         $globals = Craft::$app->view->getTwig()->getGlobals();
-        foreach ($globals as $key => $value) {
-            $type = gettype($value);
-            if ($type) {
-                $variables[$key] = $type;
+        /** @var CraftVariable $craftVariable */
+        if (isset($globals['craft'])) {
+            $craftVariable = $globals['craft'];
+            foreach ($craftVariable->getComponents() as $key => $value) {
+                $type = gettype($value);
+                switch ($type) {
+                    case 'string':
+                        $propertiesText .= " * @property \\{$value} \${$key}" . PHP_EOL;
+                        break;
+
+                    case 'object':
+                        $className = get_class($value);
+                        $propertiesText .= " * @property \\{$className} \${$key}" . PHP_EOL;
+                        break;
+                }
+
             }
         }
 
         // Save the template with variable substitution
         $vars = [
+            '{{ properties }}' => rtrim($propertiesText, PHP_EOL),
         ];
         self::saveTemplate($vars);
     }

@@ -48,26 +48,38 @@ class AutocompleteTwigExtensionGenerator extends Generator
      */
     public static function regenerate(): void
     {
-        $components = [];
+        $globalsText = '';
         /** @noinspection PhpInternalEntityUsedInspection */
         $globals = Craft::$app->view->getTwig()->getGlobals();
-        /** @var CraftVariable $craftVariable */
-        if (isset($globals['craft'])) {
-            $craftVariable = $globals['craft'];
-            foreach ($craftVariable->getComponents() as $key => $value) {
-                $type = gettype($value);
-                if ($type) {
-                    if ($type === 'string') {
-                        $components[$key] = $value;
-                    } else {
-                        $components[$key] = $type;
+        foreach ($globals as $key => $value) {
+            $type = gettype($value);
+            switch ($type) {
+                case 'object':
+                    $className = get_class($value);
+                    // Swap in our variable in place of the 'craft' variable
+                    if ($key === 'craft') {
+                        $className = 'nystudio107\autocomplete\variables\AutocompleteVariable';
                     }
-                }
+                    $globalsText.= "        '{$key}' => new \\{$className}()," . PHP_EOL;
+                    break;
+
+                case 'string':
+                    $globalsText.= "        '{$key}' => '{$value}'," . PHP_EOL;
+                    break;
+
+                case 'array':
+                case 'unknown type':
+                    break;
+
+                default:
+                    $globalsText.= "        '{$key}' => {$value}," . PHP_EOL;
+                    break;
             }
         }
 
         // Save the template with variable substitution
         $vars = [
+            '{{ globals }}' => rtrim($globalsText, PHP_EOL),
         ];
         self::saveTemplate($vars);
     }
