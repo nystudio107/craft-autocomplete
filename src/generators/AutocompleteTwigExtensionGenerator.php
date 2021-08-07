@@ -75,12 +75,12 @@ class AutocompleteTwigExtensionGenerator extends Generator
                     $globalsArray[$key] = "'$value'";
                     break;
 
-                case 'NULL':
-                    $globalsArray[$key] = "null";
+                case 'array':
+                    $globalsArray[$key] = "[]";
                     break;
 
-                default:
-                    $globalsArray[$key] = "''";
+                case 'NULL':
+                    $globalsArray[$key] = "null";
                     break;
             }
         }
