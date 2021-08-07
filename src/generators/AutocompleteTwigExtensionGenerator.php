@@ -12,6 +12,7 @@
 
 namespace nystudio107\autocomplete\generators;
 
+use craft\elements\User;
 use nystudio107\autocomplete\base\Generator;
 
 use Craft;
@@ -86,6 +87,9 @@ class AutocompleteTwigExtensionGenerator extends Generator
                     break;
             }
         }
+
+        // Ensure a current user is set
+        $values['currentUser'] = new User();
 
         foreach ($values as $key => $value) {
             $values[$key] = "            '$key' => $value,";
