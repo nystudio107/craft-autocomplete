@@ -72,14 +72,17 @@ abstract class Generator implements GeneratorInterface
     }
 
     /**
-     * Don't regenerate the file if it already exists
+     * Don't regenerate the file if it already exists, and is less than 10 seconds old
      *
      * @return bool
      */
     protected static function shouldRegenerateFile(): bool
     {
-        if (is_file(self::getGeneratedFilePath())) {
-            return false;
+        $path = self::getGeneratedFilePath();
+        if (is_file($path)) {
+            if (time() - filemtime($path) > 10) {
+                return false;
+            }
         }
 
         return true;
