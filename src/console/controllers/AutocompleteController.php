@@ -26,7 +26,7 @@ class AutocompleteController extends Controller
     public function actionRegenerate(): int
     {
         $this->stdout('Regenerating all autocomplete templates ... ', Console::FG_YELLOW);
-        Autocomplete::getInstance()->generateAutocompleteTemplates();
+        Autocomplete::getInstance()->regenerateAutocompleteTemplates();
         $this->stdout('done' . PHP_EOL, Console::FG_GREEN);
 
         return ExitCode::OK;

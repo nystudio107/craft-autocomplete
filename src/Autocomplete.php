@@ -60,12 +60,17 @@ class Autocomplete extends Module implements BootstrapInterface
      * );
      * ```
      */
-    const EVENT_REGISTER_AUTOCOMPLETE_GENERATORS = 'registerAutocompleteGenerators';
+    public const EVENT_REGISTER_AUTOCOMPLETE_GENERATORS = 'registerAutocompleteGenerators';
 
-    const DEFAULT_AUTOCOMPLETE_GENERATORS = [
+    public const DEFAULT_AUTOCOMPLETE_GENERATORS = [
         AutocompleteVariableGenerator::class,
         AutocompleteTwigExtensionGenerator::class,
     ];
+
+    // Private Properties
+    // =========================================================================
+
+    private $allAutocompleteGenerators = null;
 
     // Public Methods
     // =========================================================================
@@ -75,7 +80,7 @@ class Autocomplete extends Module implements BootstrapInterface
      *
      * @param YiiApp $app
      */
-    public function bootstrap($app)
+    public function bootstrap($app): void
     {
         // Make sure it's Craft
         if (!($app instanceof CraftWebApp || $app instanceof CraftConsoleApp)) {
@@ -93,6 +98,7 @@ class Autocomplete extends Module implements BootstrapInterface
         // Register our event handlers
         $this->registerEventHandlers();
 
+        // Add our
         if (Craft::$app->request->isConsoleRequest) {
             Craft::$app->controllerMap['autocomplete'] = AutocompleteController::class;
         }
@@ -101,18 +107,18 @@ class Autocomplete extends Module implements BootstrapInterface
     /**
      * Registers our event handlers
      */
-    public function registerEventHandlers()
+    public function registerEventHandlers(): void
     {
-        Event::on(Plugins::class,Plugins::EVENT_AFTER_INSTALL_PLUGIN, [$this, 'generateAutocompleteTemplates']);
-        Event::on(Plugins::class,Plugins::EVENT_AFTER_UNINSTALL_PLUGIN, [$this, 'generateAutocompleteTemplates']);
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_INSTALL_PLUGIN, [$this, 'regenerateAutocompleteTemplates']);
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_UNINSTALL_PLUGIN, [$this, 'regenerateAutocompleteTemplates']);
         Event::on(Plugins::class,Plugins::EVENT_AFTER_LOAD_PLUGINS, [$this, 'generateAutocompleteTemplates']);
         Craft::info('Event Handlers installed',__METHOD__);
     }
 
     /**
-     * Call each of the autocomplete generator classes to tell them to generate their templates
+     * Call each of the autocomplete generator classes to tell them to generate their templates if they don't exist already
      */
-    public function generateAutocompleteTemplates()
+    public function generateAutocompleteTemplates(): void
     {
         $autocompleteGenerators = $this->getAllAutocompleteGenerators();
         foreach($autocompleteGenerators as $generatorClass) {
@@ -120,6 +126,19 @@ class Autocomplete extends Module implements BootstrapInterface
             $generatorClass::generate();
         }
         Craft::info('Autocomplete templates generated',__METHOD__);
+    }
+
+    /**
+     * Call each of the autocomplete generator classes to tell them to regenerate their templates from scratch
+     */
+    public function regenerateAutocompleteTemplates(): void
+    {
+        $autocompleteGenerators = $this->getAllAutocompleteGenerators();
+        foreach($autocompleteGenerators as $generatorClass) {
+            /** @var Generator $generatorClass */
+            $generatorClass::regenerate();
+        }
+        Craft::info('Autocomplete templates regenerated',__METHOD__);
     }
 
     // Protected Methods
@@ -132,6 +151,9 @@ class Autocomplete extends Module implements BootstrapInterface
      */
     public function getAllAutocompleteGenerators(): array
     {
+        if ($this->allAutocompleteGenerators) {
+            return $this->allAutocompleteGenerators;
+        }
         $autocompleteGenerators = array_unique(array_merge(
             self::DEFAULT_AUTOCOMPLETE_GENERATORS
         ), SORT_REGULAR);
@@ -140,8 +162,8 @@ class Autocomplete extends Module implements BootstrapInterface
             'types' => $autocompleteGenerators
         ]);
         $this->trigger(self::EVENT_REGISTER_AUTOCOMPLETE_GENERATORS, $event);
+        $this->allAutocompleteGenerators = $event->types;
 
-        return $event->types;
+        return $this->allAutocompleteGenerators;
     }
-
 }

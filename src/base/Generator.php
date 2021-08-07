@@ -25,7 +25,18 @@ abstract class Generator implements GeneratorInterface
     // Public Static Methods
     // =========================================================================
 
-    public static function generate()
+    /**
+     * @inheritDoc
+     */
+    public static function generate(): void
     {
     }
+
+    /**
+     * @inheritDoc
+     */
+    public static function regenerate(): void
+    {
+    }
+
 }

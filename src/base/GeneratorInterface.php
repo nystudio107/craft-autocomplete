@@ -24,5 +24,13 @@ interface GeneratorInterface
     // Public Static Methods
     // =========================================================================
 
-    public static function generate();
+    /**
+     * Generate the auto-complete file if it doesn't exist already
+     */
+    public static function generate(): void;
+
+    /**
+     * Regenerate the auto-complete from scratch
+     */
+    public static function regenerate(): void;
 }
