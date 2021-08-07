@@ -36,12 +36,12 @@ interface GeneratorInterface
     public static function getGeneratorName(): string;
 
     /**
-     * Generate the auto-complete file if it doesn't exist already
+     * Generate the autocomplete class if it doesn't exist already
      */
     public static function generate(): void;
 
     /**
-     * Regenerate the auto-complete from scratch
+     * Regenerate the autocomplete classes from scratch
      */
     public static function regenerate(): void;
 }
