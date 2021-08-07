@@ -19,6 +19,10 @@
         {
             "name": "nystudio107",
             "homepage": "https://nystudio107.com"
+        },
+        {
+            "name": "PutYourLightsOn",
+            "homepage": "https://putyourlightson.com"
         }
     ],
     "require": {

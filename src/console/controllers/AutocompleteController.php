@@ -5,7 +5,9 @@
  * Provides Twig template IDE autocomplete of Craft CMS & plugin variables
  *
  * @link      https://nystudio107.com
+ * @link      https://putyourlightson.com
  * @copyright Copyright (c) 2021 nystudio107
+ * @copyright Copyright (c) 2021 PutYourLightsOn
  */
 
 namespace nystudio107\autocomplete\console\controllers;
