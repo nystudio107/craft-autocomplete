@@ -74,7 +74,6 @@ class AutocompleteVariableGenerator extends Generator
                         $values[$key] = $value;
                         break;
                 }
-
             }
         }
 
