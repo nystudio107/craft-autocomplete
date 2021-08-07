@@ -23,8 +23,7 @@ This plugin requires Craft CMS 3.0.0 or later.
     composer require nystudio107/craft-autocomplete
     ```
 
-2. Ensure that the [Symfony Support plugin](https://plugins.jetbrains.com/plugin/7219-symfony-plugin
-) for PhpStorm is installed and enabled.  
+2. Ensure that the [Symfony Support plugin](https://plugins.jetbrains.com/plugin/7219-symfony-plugin) for PhpStorm is installed and enabled.  
     
 3. Ensure that `devMode` is enabled.
 
@@ -39,6 +38,8 @@ Once your IDE indexes the autocomplete classes, autocompletion for Craft and all
 ![screenshot](https://user-images.githubusercontent.com/57572400/125784167-618830ae-e475-4faf-81d3-194ad7ce3a08.png)
 
 ## Regenerating Autocomplete Classes
+
+The autocomplete classes are all generated any time Craft renders a page via Twig if they do not yet exist.
 
 The autocomplete classes are all regenerated every time you install or uninstall a plugin.
 
@@ -86,6 +87,8 @@ Event::on(Autocomplete::class,
     }
 );
 ```
+
+See the included generators for guidance on how to create your own.
 
 ## How It Works
 
