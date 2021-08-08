@@ -64,6 +64,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
      */
     private static function generateInternal()
     {
+        // Start from the cache values, so the auto-complete variables are additive for generation
         $values = static::getCachedValues();
         // Route variables are not merged in until the template is rendered, so do it here manually
         /* @noinspection PhpInternalEntityUsedInspection */
