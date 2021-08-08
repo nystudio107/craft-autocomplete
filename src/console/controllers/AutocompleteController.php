@@ -29,7 +29,7 @@ class AutocompleteController extends Controller
     public function actionGenerate(): int
     {
         $this->stdout('Generating autocomplete classes ... ', BaseConsole::FG_YELLOW);
-        /** @noinspection NullPointerExceptionInspection */
+        /* @noinspection NullPointerExceptionInspection */
         Autocomplete::getInstance()->generateAutocompleteTemplates();
         $this->stdout('done' . PHP_EOL, BaseConsole::FG_GREEN);
 
@@ -42,7 +42,7 @@ class AutocompleteController extends Controller
     public function actionRegenerate(): int
     {
         $this->stdout('Regenerating autocomplete classes ... ', BaseConsole::FG_YELLOW);
-        /** @noinspection NullPointerExceptionInspection */
+        /* @noinspection NullPointerExceptionInspection */
         Autocomplete::getInstance()->regenerateAutocompleteTemplates();
         $this->stdout('done' . PHP_EOL, BaseConsole::FG_GREEN);
 

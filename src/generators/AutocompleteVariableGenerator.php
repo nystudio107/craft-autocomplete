@@ -51,9 +51,9 @@ class AutocompleteVariableGenerator extends Generator
     public static function regenerate()
     {
         $values = [];
-        /** @noinspection PhpInternalEntityUsedInspection */
+        /* @noinspection PhpInternalEntityUsedInspection */
         $globals = Craft::$app->view->getTwig()->getGlobals();
-        /** @var CraftVariable $craftVariable */
+        /* @var CraftVariable $craftVariable */
         if (isset($globals['craft'])) {
             $craftVariable = $globals['craft'];
             foreach ($craftVariable->getComponents() as $key => $value) {

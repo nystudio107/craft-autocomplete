@@ -49,7 +49,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
     public static function regenerate()
     {
         $values = [];
-        /** @noinspection PhpInternalEntityUsedInspection */
+        /* @noinspection PhpInternalEntityUsedInspection */
         $globals = array_merge(
             Craft::$app->view->getTwig()->getGlobals(),
             Craft::$app->controller->actionParams['variables'] ?? []
