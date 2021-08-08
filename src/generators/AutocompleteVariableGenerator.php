@@ -41,7 +41,7 @@ class AutocompleteVariableGenerator extends Generator
     public static function generate()
     {
         if (self::shouldRegenerateFile()) {
-            static::regenerate();
+            static::generateInternal();
         }
     }
 
@@ -49,6 +49,17 @@ class AutocompleteVariableGenerator extends Generator
      * @inheritDoc
      */
     public static function regenerate()
+    {
+        static::generateInternal();
+    }
+
+    // Private Static Methods
+    // =========================================================================
+
+    /**
+     * Core function that generates the autocomplete class
+     */
+    private static function generateInternal()
     {
         $values = [];
         /* @noinspection PhpInternalEntityUsedInspection */

@@ -23,6 +23,10 @@ use Craft;
  */
 class AutocompleteTwigExtensionGenerator extends Generator
 {
+    // Constants
+    // =========================================================================
+    const CACHE_KEY = '_VALUES_CACHE';
+
     // Public Static Methods
     // =========================================================================
 
@@ -40,7 +44,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
     public static function generate()
     {
         // We always regenerate, to be context-sensitive based on the last page that was loaded/rendered
-        static::regenerate();
+        self::generateInternal();
     }
 
     /**
@@ -48,7 +52,19 @@ class AutocompleteTwigExtensionGenerator extends Generator
      */
     public static function regenerate()
     {
-        $values = [];
+        static::clearCachedValues();
+        self::generateInternal();
+    }
+
+    // Private Static Methods
+    // =========================================================================
+
+    /**
+     * Core function that generates the autocomplete class
+     */
+    private static function generateInternal()
+    {
+        $values = static::getCachedValues();
         // Route variables are not merged in until the template is rendered, so do it here manually
         /* @noinspection PhpInternalEntityUsedInspection */
         $globals = array_merge(
@@ -87,7 +103,8 @@ class AutocompleteTwigExtensionGenerator extends Generator
 
         // Override values that should be used for autocompletion
         static::overrideValues($values);
-
+        // Cache the values
+        static::setCachedValues($values);
         // Format the line output for each value
         foreach ($values as $key => $value) {
             $values[$key] = "            '" . $key . "' => " . $value . ",";
@@ -99,8 +116,48 @@ class AutocompleteTwigExtensionGenerator extends Generator
         ]);
     }
 
-    // Public Static Methods
-    // =========================================================================
+    /**
+     * Get the cached values
+     *
+     * @return array
+     */
+    private static function getCachedValues(): array
+    {
+        $cache = Craft::$app->getCache();
+        return $cache->get(static::getCacheKey()) ?: [];
+    }
+
+    /**
+     * Set the cached values
+     *
+     * @return array
+     */
+    private static function setCachedValues(array $values)
+    {
+        $cache = Craft::$app->getCache();
+        $cache->set(static::getCacheKey(), $values, 0);
+    }
+
+    /**
+     * Clear the cached values
+     *
+     * @return array
+     */
+    private static function clearCachedValues()
+    {
+        $cache = Craft::$app->getCache();
+        $cache->delete(static::getCacheKey());
+    }
+
+    /**
+     * Get the cached key
+     *
+     * @return string
+     */
+    private static function getCacheKey(): string
+    {
+        return static::getGeneratorName() . static::CACHE_KEY;
+    }
 
     /**
      * Override certain values that we always want hard-coded
