@@ -12,8 +12,6 @@
 
 namespace nystudio107\autocomplete\generators;
 
-use craft\base\ElementInterface;
-use craft\elements\User;
 use nystudio107\autocomplete\base\Generator;
 
 use Craft;

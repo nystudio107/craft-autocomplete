@@ -73,7 +73,7 @@ class Autocomplete extends Module implements BootstrapInterface
     // Private Properties
     // =========================================================================
 
-    private $allAutocompleteGenerators = null;
+    private $allAutocompleteGenerators;
 
     // Public Methods
     // =========================================================================
@@ -85,6 +85,10 @@ class Autocomplete extends Module implements BootstrapInterface
      */
     public function bootstrap($app)
     {
+        // Set the currently requested instance of this module class,
+        // so we can later access it with `Autocomplete::getInstance()`
+        static::setInstance($this);
+
         // Make sure it's Craft
         if (!($app instanceof CraftWebApp || $app instanceof CraftConsoleApp)) {
             return;
@@ -93,10 +97,6 @@ class Autocomplete extends Module implements BootstrapInterface
         if (!Craft::$app->config->general->devMode) {
             return;
         }
-
-        // Set the currently requested instance of this module class,
-        // so we can later access it with `Autocomplete::getInstance()`
-        static::setInstance($this);
 
         // Register our event handlers
         $this->registerEventHandlers();
