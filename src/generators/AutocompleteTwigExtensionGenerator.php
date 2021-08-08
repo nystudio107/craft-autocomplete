@@ -59,12 +59,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
             $type = gettype($value);
             switch ($type) {
                 case 'object':
-                    $className = get_class($value);
-                    // Swap in our variable in place of the `craft` variable
-                    if ($key === 'craft') {
-                        $className = 'nystudio107\autocomplete\variables\AutocompleteVariable';
-                    }
-                    $values[$key] = 'new \\'.$className.'()';
+                    $values[$key] = 'new \\' . get_class($value) . '()';
                     break;
 
                 case 'boolean':
@@ -77,7 +72,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
                     break;
 
                 case 'string':
-                    $values[$key] = '"'.$value.'"';
+                    $values[$key] = "'" . addslashes($value) . "'";
                     break;
 
                 case 'array':
@@ -90,14 +85,29 @@ class AutocompleteTwigExtensionGenerator extends Generator
             }
         }
 
+        // Override values that should be used for autocompletion
+        static::_overrideValues($values);
+
         // Format the line output for each value
         foreach ($values as $key => $value) {
-            $values[$key] = '            "'.$key.'" => '.$value.',';
+            $values[$key] = "            '" . $key . "' => " . $value . ",";
         }
 
         // Save the template with variable substitution
         self::saveTemplate([
             '{{ globals }}' => implode(PHP_EOL, $values),
         ]);
+    }
+
+    private static function _overrideValues(array &$values)
+    {
+        // Swap in our variable in place of the `craft` variable
+        $values['craft'] = 'new \nystudio107\autocomplete\variables\AutocompleteVariable()';
+
+        // Set the current user to a new user, so it is never `null`
+        $values['currentUser'] = 'new \craft\elements\User()';
+
+        // Set the nonce to a blank string, as it changes on every request
+        $values['nonce'] = "''";
     }
 }
