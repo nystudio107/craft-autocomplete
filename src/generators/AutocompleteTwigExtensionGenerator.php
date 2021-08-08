@@ -49,6 +49,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
     public static function regenerate()
     {
         $values = [];
+        // Route variables are not merged in until the template is rendered, so do it here manually
         /* @noinspection PhpInternalEntityUsedInspection */
         $globals = array_merge(
             Craft::$app->view->getTwig()->getGlobals(),
