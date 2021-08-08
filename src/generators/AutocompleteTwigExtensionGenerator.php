@@ -86,7 +86,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
         }
 
         // Override values that should be used for autocompletion
-        static::_overrideValues($values);
+        static::overrideValues($values);
 
         // Format the line output for each value
         foreach ($values as $key => $value) {
@@ -99,7 +99,15 @@ class AutocompleteTwigExtensionGenerator extends Generator
         ]);
     }
 
-    private static function _overrideValues(array &$values)
+    // Public Static Methods
+    // =========================================================================
+
+    /**
+     * Override certain values that we always want hard-coded
+     *
+     * @param array $values
+     */
+    private static function overrideValues(array &$values)
     {
         // Swap in our variable in place of the `craft` variable
         $values['craft'] = 'new \nystudio107\autocomplete\variables\AutocompleteVariable()';
