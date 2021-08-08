@@ -77,8 +77,9 @@ class AutocompleteVariableGenerator extends Generator
             }
         }
 
+        // Format the line output for each value
         foreach ($values as $key => $value) {
-            $values[$key] = ' * @property \\'.$value.' $'.$key;
+            $values[$key] = ' * @property \\' . $value . ' $' . $key;
         }
 
         // Save the template with variable substitution
