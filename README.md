@@ -37,6 +37,8 @@ Once your IDE indexes the autocomplete classes, autocompletion for Craft and all
 
 ![screenshot](https://user-images.githubusercontent.com/57572400/125784167-618830ae-e475-4faf-81d3-194ad7ce3a08.png)
 
+**N.B.:** If you are using a Docker-ized setup, ensure that `storage/runtime/compiled_classes/` is bind mounted on your client machine, so your IDE can find the classes to index them
+
 ## Regenerating Autocomplete Classes
 
 The autocomplete classes are all generated any time Craft renders a page via Twig if they do not yet exist.
