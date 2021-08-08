@@ -7,8 +7,11 @@
         "craft",
         "cms",
         "craftcms",
-        "craft-plugin",
-        "autocomplete"
+        "twig",
+        "symfony",
+        "autocomplete",
+        "auto",
+        "complete"
     ],
     "support": {
         "docs": "https://github.com/nystudio107/craft-autocomplete/blob/master/README.md",
