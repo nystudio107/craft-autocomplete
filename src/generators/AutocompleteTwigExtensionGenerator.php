@@ -15,6 +15,7 @@ namespace nystudio107\autocomplete\generators;
 use nystudio107\autocomplete\base\Generator;
 
 use Craft;
+use craft\base\Element;
 
 /**
  * @author    nystudio107
@@ -23,6 +24,14 @@ use Craft;
  */
 class AutocompleteTwigExtensionGenerator extends Generator
 {
+    // const
+    // =========================================================================
+
+    const ELEMENT_ROUTE_EXCLUDES = [
+        'matrixblock',
+        'globalset'
+    ];
+
     // Public Static Methods
     // =========================================================================
 
@@ -92,9 +101,10 @@ class AutocompleteTwigExtensionGenerator extends Generator
                     break;
             }
         }
-        // Override values that should be used for autocompletion
+        // Mix in element route variables, and override values that should be used for autocompletion
         $values = array_merge(
             $values,
+            static::elementRouteVariables(),
             static::overrideValues()
         );
         // Format the line output for each value
@@ -105,6 +115,26 @@ class AutocompleteTwigExtensionGenerator extends Generator
         self::saveTemplate([
             '{{ globals }}' => implode(PHP_EOL, $values),
         ]);
+    }
+
+    /**
+     * Add in the element types that could be injected as route variables
+     *
+     * @return array
+     */
+    private static function elementRouteVariables(): array
+    {
+        $routeVariables = [];
+        $elementTypes = Craft::$app->elements->getAllElementTypes();
+        foreach ($elementTypes as $elementType) {
+            /* @var Element $elementType */
+            $key = $elementType::refHandle();
+            if (!empty($key) && !in_array($key, static::ELEMENT_ROUTE_EXCLUDES)) {
+                $routeVariables[$key] = 'new \\' . $elementType . '()';
+            }
+        }
+
+        return $routeVariables;
     }
 
     /**
