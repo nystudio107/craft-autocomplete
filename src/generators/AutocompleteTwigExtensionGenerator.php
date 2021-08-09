@@ -48,8 +48,9 @@ class AutocompleteTwigExtensionGenerator extends Generator
      */
     public static function generate()
     {
-        // We always regenerate, to be context-sensitive based on the last page that was loaded/rendered
-        self::generateInternal();
+        if (self::shouldRegenerateFile()) {
+            static::generateInternal();
+        }
     }
 
     /**
