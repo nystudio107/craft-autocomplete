@@ -41,7 +41,7 @@ class AutocompleteVariableGenerator extends Generator
     public static function generate()
     {
         if (self::shouldRegenerateFile()) {
-            static::regenerate();
+            static::generateInternal();
         }
     }
 
@@ -49,6 +49,17 @@ class AutocompleteVariableGenerator extends Generator
      * @inheritDoc
      */
     public static function regenerate()
+    {
+        static::generateInternal();
+    }
+
+    // Private Static Methods
+    // =========================================================================
+
+    /**
+     * Core function that generates the autocomplete class
+     */
+    private static function generateInternal()
     {
         $values = [];
         /* @noinspection PhpInternalEntityUsedInspection */
@@ -77,8 +88,9 @@ class AutocompleteVariableGenerator extends Generator
             }
         }
 
+        // Format the line output for each value
         foreach ($values as $key => $value) {
-            $values[$key] = ' * @property \\'.$value.' $'.$key;
+            $values[$key] = ' * @property \\' . $value . ' $' . $key;
         }
 
         // Save the template with variable substitution

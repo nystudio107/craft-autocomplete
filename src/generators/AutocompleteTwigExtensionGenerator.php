@@ -15,6 +15,7 @@ namespace nystudio107\autocomplete\generators;
 use nystudio107\autocomplete\base\Generator;
 
 use Craft;
+use craft\base\Element;
 
 /**
  * @author    nystudio107
@@ -23,6 +24,14 @@ use Craft;
  */
 class AutocompleteTwigExtensionGenerator extends Generator
 {
+    // const
+    // =========================================================================
+
+    const ELEMENT_ROUTE_EXCLUDES = [
+        'matrixblock',
+        'globalset'
+    ];
+
     // Public Static Methods
     // =========================================================================
 
@@ -40,7 +49,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
     public static function generate()
     {
         // We always regenerate, to be context-sensitive based on the last page that was loaded/rendered
-        static::regenerate();
+        self::generateInternal();
     }
 
     /**
@@ -48,23 +57,26 @@ class AutocompleteTwigExtensionGenerator extends Generator
      */
     public static function regenerate()
     {
+        self::generateInternal();
+    }
+
+    // Private Static Methods
+    // =========================================================================
+
+    /**
+     * Core function that generates the autocomplete class
+     */
+    private static function generateInternal()
+    {
         $values = [];
-        // Route variables are not merged in until the template is rendered, so do it here manually
+        // Iterate through the globals in the Twig context
         /* @noinspection PhpInternalEntityUsedInspection */
-        $globals = array_merge(
-            Craft::$app->view->getTwig()->getGlobals(),
-            Craft::$app->controller->actionParams['variables'] ?? []
-        );
+        $globals = Craft::$app->view->getTwig()->getGlobals();
         foreach ($globals as $key => $value) {
             $type = gettype($value);
             switch ($type) {
                 case 'object':
-                    $className = get_class($value);
-                    // Swap in our variable in place of the `craft` variable
-                    if ($key === 'craft') {
-                        $className = 'nystudio107\autocomplete\variables\AutocompleteVariable';
-                    }
-                    $values[$key] = 'new \\'.$className.'()';
+                    $values[$key] = 'new \\' . get_class($value) . '()';
                     break;
 
                 case 'boolean':
@@ -77,7 +89,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
                     break;
 
                 case 'string':
-                    $values[$key] = '"'.$value.'"';
+                    $values[$key] = "'" . addslashes($value) . "'";
                     break;
 
                 case 'array':
@@ -89,15 +101,56 @@ class AutocompleteTwigExtensionGenerator extends Generator
                     break;
             }
         }
-
+        // Mix in element route variables, and override values that should be used for autocompletion
+        $values = array_merge(
+            $values,
+            static::elementRouteVariables(),
+            static::overrideValues()
+        );
         // Format the line output for each value
         foreach ($values as $key => $value) {
-            $values[$key] = '            "'.$key.'" => '.$value.',';
+            $values[$key] = "            '" . $key . "' => " . $value . ",";
         }
-
         // Save the template with variable substitution
         self::saveTemplate([
             '{{ globals }}' => implode(PHP_EOL, $values),
         ]);
+    }
+
+    /**
+     * Add in the element types that could be injected as route variables
+     *
+     * @return array
+     */
+    private static function elementRouteVariables(): array
+    {
+        $routeVariables = [];
+        $elementTypes = Craft::$app->elements->getAllElementTypes();
+        foreach ($elementTypes as $elementType) {
+            /* @var Element $elementType */
+            $key = $elementType::refHandle();
+            if (!empty($key) && !in_array($key, static::ELEMENT_ROUTE_EXCLUDES)) {
+                $routeVariables[$key] = 'new \\' . $elementType . '()';
+            }
+        }
+
+        return $routeVariables;
+    }
+
+    /**
+     * Override certain values that we always want hard-coded
+     *
+     * @return array
+     */
+    private static function overrideValues(): array
+    {
+        return [
+            // Swap in our variable in place of the `craft` variable
+            'craft' => 'new \nystudio107\autocomplete\variables\AutocompleteVariable()',
+            // Set the current user to a new user, so it is never `null`
+            'currentUser' => 'new \craft\elements\User()',
+            // Set the nonce to a blank string, as it changes on every request
+            'nonce' => "''",
+        ];
     }
 }
