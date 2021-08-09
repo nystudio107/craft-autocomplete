@@ -37,15 +37,16 @@ Once your IDE indexes the autocomplete classes, autocompletion for Craft and all
 
 ![screenshot](https://user-images.githubusercontent.com/57572400/125784167-618830ae-e475-4faf-81d3-194ad7ce3a08.png)
 
+Additionally, elements that are injected into templates based on route such as `entry`, `category`, and `prodect` are also available for autocompletion.
+
+
 **N.B.:** If you are using a Docker-ized setup, ensure that `storage/runtime/compiled_classes/` is bind mounted on your client machine, so your IDE can find the classes to index them
 
 ## Regenerating Autocomplete Classes
 
-The autocomplete classes are all generated any time Craft renders a page via Twig if they do not yet exist.
+The autocomplete classes are all generated any time Craft executes (whether via frontend request or via CLI), if they do not yet exist.
 
 The autocomplete classes are all regenerated every time you install or uninstall a plugin.
-
-The `AutocompleteTwigExtension` is regenerated on each Twig page render, so it can provide context-sensitive results for the current page/template you're editing, such as any injected route variables like `entry`.
 
 If you manually add a plugin or module that registers variables on the Craft global variable, you can force the regeneratation of the autocomplete classes by running the following console command.
 
