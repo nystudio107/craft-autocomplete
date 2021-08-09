@@ -22,7 +22,6 @@ use craft\console\Application as CraftConsoleApp;
 use craft\events\RegisterComponentTypesEvent;
 use craft\services\Plugins;
 use craft\web\Application as CraftWebApp;
-use craft\web\View;
 
 use yii\base\Application as YiiApp;
 use yii\base\BootstrapInterface;
@@ -114,7 +113,7 @@ class Autocomplete extends Module implements BootstrapInterface
     {
         Event::on(Plugins::class,Plugins::EVENT_AFTER_INSTALL_PLUGIN, [$this, 'regenerateAutocompleteTemplates']);
         Event::on(Plugins::class,Plugins::EVENT_AFTER_UNINSTALL_PLUGIN, [$this, 'regenerateAutocompleteTemplates']);
-        Event::on(View::class,View::EVENT_BEFORE_RENDER_PAGE_TEMPLATE, [$this, 'generateAutocompleteTemplates']);
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_LOAD_PLUGINS, [$this, 'generateAutocompleteTemplates']);
         Craft::info('Event Handlers installed',__METHOD__);
     }
 
