@@ -108,5 +108,4 @@ abstract class Generator implements GeneratorInterface
     {
         return static::getGeneratorStubsPath() . DIRECTORY_SEPARATOR . static::getGeneratorName() . self::STUBS_EXTENSION;
     }
-
 }
