@@ -2,12 +2,12 @@
 
 # Autocomplete for Craft CMS 3.x
 
-Provides Twig template IDE autocompletion for Craft CMS and plugin/module variables.
+Provides Twig template IDE autocompletion for Craft CMS and plugin/module variables and element types.
 
 Works with PhpStorm provided the [Symfony Support plugin](https://plugins.jetbrains.com/plugin/7219-symfony-plugin
 ) is installed. VSCode currently does not support intellisense for Twig extensions.
 
-> While Craft [3.7.8](https://github.com/craftcms/cms/blob/develop/CHANGELOG.md#378---2021-08-06) added autocompletion for Craft’s global Twig variables, this does not include autocompletion for plugins and modules that provide their own variables.
+> While Craft [3.7.8](https://github.com/craftcms/cms/blob/develop/CHANGELOG.md#378---2021-08-06) added autocompletion for Craft’s global Twig variables, this does not include autocompletion for plugins and modules that provide their own variables or element types.
 
 ![demo](https://user-images.githubusercontent.com/57572400/126911028-7d7d06dd-c60f-42b9-ae42-95d5f078a229.gif)
 
@@ -37,8 +37,7 @@ Once your IDE indexes the autocomplete classes, autocompletion for Craft and all
 
 ![screenshot](https://user-images.githubusercontent.com/57572400/125784167-618830ae-e475-4faf-81d3-194ad7ce3a08.png)
 
-Additionally, elements that are injected into templates based on route such as `entry`, `category`, and `prodect` are also available for autocompletion.
-
+Additionally, autocompletion for element types provided by both Craft and plugins/modules is available, for example: `asset`, `entry`, `category`, `tag`, `user`, `product` (if Craft Commerce is installed), etc.
 
 **N.B.:** If you are using a Docker-ized setup, ensure that `storage/runtime/compiled_classes/` is bind mounted on your client machine, so your IDE can find the classes to index them
 
