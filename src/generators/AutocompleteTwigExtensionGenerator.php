@@ -23,10 +23,6 @@ use Craft;
  */
 class AutocompleteTwigExtensionGenerator extends Generator
 {
-    // Constants
-    // =========================================================================
-    const CACHE_KEY = '_VALUES_CACHE';
-
     // Public Static Methods
     // =========================================================================
 
@@ -52,7 +48,6 @@ class AutocompleteTwigExtensionGenerator extends Generator
      */
     public static function regenerate()
     {
-        static::clearCachedValues();
         self::generateInternal();
     }
 
@@ -64,14 +59,10 @@ class AutocompleteTwigExtensionGenerator extends Generator
      */
     private static function generateInternal()
     {
-        // Start from the cache values, so the auto-complete variables are additive for generation
-        $values = static::getCachedValues();
-        // Route variables are not merged in until the template is rendered, so do it here manually
+        $values = [];
+        // Iterate through the globals in the Twig context
         /* @noinspection PhpInternalEntityUsedInspection */
-        $globals = array_merge(
-            Craft::$app->view->getTwig()->getGlobals(),
-            Craft::$app->controller->actionParams['variables'] ?? []
-        );
+        $globals = Craft::$app->view->getTwig()->getGlobals();
         foreach ($globals as $key => $value) {
             $type = gettype($value);
             switch ($type) {
@@ -101,63 +92,16 @@ class AutocompleteTwigExtensionGenerator extends Generator
                     break;
             }
         }
-
         // Override values that should be used for autocompletion
         static::overrideValues($values);
-        // Cache the values
-        static::setCachedValues($values);
         // Format the line output for each value
         foreach ($values as $key => $value) {
             $values[$key] = "            '" . $key . "' => " . $value . ",";
         }
-
         // Save the template with variable substitution
         self::saveTemplate([
             '{{ globals }}' => implode(PHP_EOL, $values),
         ]);
-    }
-
-    /**
-     * Get the cached values
-     *
-     * @return array
-     */
-    private static function getCachedValues(): array
-    {
-        $cache = Craft::$app->getCache();
-        return $cache->get(static::getCacheKey()) ?: [];
-    }
-
-    /**
-     * Set the cached values
-     *
-     * @return array
-     */
-    private static function setCachedValues(array $values)
-    {
-        $cache = Craft::$app->getCache();
-        $cache->set(static::getCacheKey(), $values, 0);
-    }
-
-    /**
-     * Clear the cached values
-     *
-     * @return array
-     */
-    private static function clearCachedValues()
-    {
-        $cache = Craft::$app->getCache();
-        $cache->delete(static::getCacheKey());
-    }
-
-    /**
-     * Get the cached key
-     *
-     * @return string
-     */
-    private static function getCacheKey(): string
-    {
-        return static::getGeneratorName() . static::CACHE_KEY;
     }
 
     /**
