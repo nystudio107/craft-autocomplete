@@ -93,7 +93,10 @@ class AutocompleteTwigExtensionGenerator extends Generator
             }
         }
         // Override values that should be used for autocompletion
-        static::overrideValues($values);
+        $values = array_merge(
+            $values,
+            static::overrideValues()
+        );
         // Format the line output for each value
         foreach ($values as $key => $value) {
             $values[$key] = "            '" . $key . "' => " . $value . ",";
@@ -107,17 +110,17 @@ class AutocompleteTwigExtensionGenerator extends Generator
     /**
      * Override certain values that we always want hard-coded
      *
-     * @param array $values
+     * @return array
      */
-    private static function overrideValues(array &$values)
+    private static function overrideValues(): array
     {
-        // Swap in our variable in place of the `craft` variable
-        $values['craft'] = 'new \nystudio107\autocomplete\variables\AutocompleteVariable()';
-
-        // Set the current user to a new user, so it is never `null`
-        $values['currentUser'] = 'new \craft\elements\User()';
-
-        // Set the nonce to a blank string, as it changes on every request
-        $values['nonce'] = "''";
+        return [
+            // Swap in our variable in place of the `craft` variable
+            'craft' => 'new \nystudio107\autocomplete\variables\AutocompleteVariable()',
+            // Set the current user to a new user, so it is never `null`
+            'currentUser' => 'new \craft\elements\User()',
+            // Set the nonce to a blank string, as it changes on every request
+            'nonce' => "''",
+        ];
     }
 }
