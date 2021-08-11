@@ -36,7 +36,16 @@
           "nystudio107\\autocomplete\\": "src/"
         }
     },
+    "scripts": {
+        "stan": "phpstan analyse src --level=3 -c phpstan.neon",
+        "test": "vendor/bin/pest"
+   },
     "extra": {
         "bootstrap": "nystudio107\\autocomplete\\Autocomplete"
+    },
+    "require-dev": {
+        "pestphp/pest": "^1.15",
+        "spatie/pest-plugin-snapshots": "^1.1",
+        "phpstan/phpstan": "^0.12.94"
     }
 }
