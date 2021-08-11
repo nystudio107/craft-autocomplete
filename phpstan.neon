@@ -1,0 +1,5 @@
+parameters:
+    checkMissingIterableValueType: false
+    scanFiles:
+        - %currentWorkingDirectory%/vendor/yiisoft/yii2/Yii.php
+        - %currentWorkingDirectory%/vendor/craftcms/cms/src/Craft.php
