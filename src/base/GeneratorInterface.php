@@ -34,22 +34,28 @@ interface GeneratorInterface
      *
      * @return string
      */
-    public static function getGeneratorName(): string;
+    public function getGeneratorName(): string;
 
     /**
      * Return a file system path to the generator stubs directory
      *
      * @return string
      */
-    public static function getGeneratorStubsPath(): string;
+    public function getGeneratorStubsPath(): string;
+
+
+    /**
+     * Called before generate()
+     */
+    public function beforeGenerate();
 
     /**
      * Generate the autocomplete class if it doesn't exist already
      */
-    public static function generate();
+    public function generate();
 
     /**
      * Regenerate the autocomplete classes from scratch
      */
-    public static function regenerate();
+    public function regenerate();
 }

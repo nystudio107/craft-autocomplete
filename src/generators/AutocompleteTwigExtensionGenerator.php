@@ -32,13 +32,16 @@ class AutocompleteTwigExtensionGenerator extends Generator
         'globalset'
     ];
 
-    // Public Static Methods
+
+    public array $globals = [];
+
+    // Public Methods
     // =========================================================================
 
     /**
      * @inheritDoc
      */
-    public static function getGeneratorName(): string
+    public function getGeneratorName(): string
     {
         return 'AutocompleteTwigExtension';
     }
@@ -46,20 +49,30 @@ class AutocompleteTwigExtensionGenerator extends Generator
     /**
      * @inheritDoc
      */
-    public static function generate()
+    public function generate()
     {
-        if (self::shouldRegenerateFile()) {
-            static::generateInternal();
+        if ($this->shouldRegenerateFile()) {
+            $this->generateInternal();
         }
     }
 
     /**
      * @inheritDoc
      */
-    public static function regenerate()
+    public function regenerate(): bool
     {
-        self::generateInternal();
+        return $this->generateInternal();
     }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function beforeGenerate(): void
+    {
+        $this->globals = Craft::$app->view->getTwig()->getGlobals();
+    }
+
 
     // Private Static Methods
     // =========================================================================
@@ -67,21 +80,39 @@ class AutocompleteTwigExtensionGenerator extends Generator
     /**
      * Core function that generates the autocomplete class
      */
-    private static function generateInternal()
+    private function generateInternal(): bool
     {
-        $values = [];
+        // Mix in element route variables, and override values that should be used for autocompletion
+        $values = array_merge(
+            $this->globalTwigVariables(),
+            $this->elementRouteVariables(),
+            $this->overrideValues()
+        );
+
+        // Format the line output for each value
+        foreach ($values as $key => $value) {
+            $values[$key] = "            '" . $key . "' => " . $value . ",";
+        }
+        // Save the template with variable substitution
+        return $this->saveTemplate([
+            '{{ globals }}' => implode(PHP_EOL, $values),
+        ]);
+    }
+
+    private function globalTwigVariables() : array
+    {
+        $globals = [];
+
         // Iterate through the globals in the Twig context
-        /* @noinspection PhpInternalEntityUsedInspection */
-        $globals = Craft::$app->view->getTwig()->getGlobals();
-        foreach ($globals as $key => $value) {
+        foreach ($this->globals as $key => $value) {
             $type = gettype($value);
             switch ($type) {
                 case 'object':
-                    $values[$key] = 'new \\' . get_class($value) . '()';
+                    $globals[$key] = 'new \\' . get_class($value) . '()';
                     break;
 
                 case 'boolean':
-                    $values[$key] = $value ? 'true' : 'false';
+                    $globals[$key] = $value ? 'true' : 'false';
                     break;
 
                 case 'integer':
@@ -90,32 +121,20 @@ class AutocompleteTwigExtensionGenerator extends Generator
                     break;
 
                 case 'string':
-                    $values[$key] = "'" . addslashes($value) . "'";
+                    $globals[$key] = "'" . addslashes($value) . "'";
                     break;
 
                 case 'array':
-                    $values[$key] = '[]';
+                    $globals[$key] = '[]';
                     break;
 
                 case 'NULL':
-                    $values[$key] = 'null';
+                    $globals[$key] = 'null';
                     break;
             }
         }
-        // Mix in element route variables, and override values that should be used for autocompletion
-        $values = array_merge(
-            $values,
-            static::elementRouteVariables(),
-            static::overrideValues()
-        );
-        // Format the line output for each value
-        foreach ($values as $key => $value) {
-            $values[$key] = "            '" . $key . "' => " . $value . ",";
-        }
-        // Save the template with variable substitution
-        self::saveTemplate([
-            '{{ globals }}' => implode(PHP_EOL, $values),
-        ]);
+
+        return $globals;
     }
 
     /**
@@ -123,7 +142,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
      *
      * @return array
      */
-    private static function elementRouteVariables(): array
+    private function elementRouteVariables(): array
     {
         $routeVariables = [];
         $elementTypes = Craft::$app->elements->getAllElementTypes();
@@ -143,7 +162,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
      *
      * @return array
      */
-    private static function overrideValues(): array
+    private function overrideValues(): array
     {
         return [
             // Swap in our variable in place of the `craft` variable

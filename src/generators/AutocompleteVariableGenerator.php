@@ -24,13 +24,15 @@ use craft\web\twig\variables\CraftVariable;
  */
 class AutocompleteVariableGenerator extends Generator
 {
+    public CraftVariable $craftVariable;
+
     // Public Static Methods
     // =========================================================================
 
     /**
      * @inheritDoc
      */
-    public static function getGeneratorName(): string
+    public function getGeneratorName(): string
     {
         return 'AutocompleteVariable';
     }
@@ -38,64 +40,78 @@ class AutocompleteVariableGenerator extends Generator
     /**
      * @inheritDoc
      */
-    public static function generate()
+    public function generate(): bool
     {
-        if (self::shouldRegenerateFile()) {
-            static::generateInternal();
+        if ($this->shouldRegenerateFile()) {
+            return $this->generateInternal();
         }
+        return false;
     }
 
     /**
      * @inheritDoc
      */
-    public static function regenerate()
+    public function regenerate(): bool
     {
-        static::generateInternal();
+        return $this->generateInternal();
     }
 
-    // Private Static Methods
+    public function beforeGenerate(): void
+    {
+        $globals = Craft::$app->view->getTwig()->getGlobals();
+        if (!($globals['craft'] instanceof CraftVariable)) {
+            throw new \InvalidArgumentException("Globals do not contain 'craft' CraftVariable.");
+        }
+
+        $this->craftVariable =  $globals['craft'];
+    }
+
+
+    // Private Methods
     // =========================================================================
 
     /**
      * Core function that generates the autocomplete class
      */
-    private static function generateInternal()
+    private function generateInternal(): bool
     {
-        $values = [];
-        /* @noinspection PhpInternalEntityUsedInspection */
-        $globals = Craft::$app->view->getTwig()->getGlobals();
-        /* @var CraftVariable $craftVariable */
-        if (isset($globals['craft'])) {
-            $craftVariable = $globals['craft'];
-            foreach ($craftVariable->getComponents() as $key => $value) {
-                $type = gettype($value);
-                switch ($type) {
-                    case 'object':
-                        $className = get_class($value);
-                        $values[$key] = $className;
-                        break;
-
-                    case 'array':
-                        if (isset($value['class'])) {
-                            $values[$key] = $value['class'];
-                        }
-                        break;
-
-                    case 'string':
-                        $values[$key] = $value;
-                        break;
-                }
-            }
-        }
+        $properties = [];
 
         // Format the line output for each value
-        foreach ($values as $key => $value) {
-            $values[$key] = ' * @property \\' . $value . ' $' . $key;
+        foreach ($this->prepareProperties($this->craftVariable) as $key => $value) {
+            $properties[] = ' * @property \\' . $value . ' $' . $key;
         }
 
         // Save the template with variable substitution
-        self::saveTemplate([
-            '{{ properties }}' => implode(PHP_EOL, $values),
+        return $this->saveTemplate([
+            '{{ properties }}' => implode(PHP_EOL, $properties),
         ]);
+    }
+
+    private function prepareProperties(CraftVariable $craftVariable) : array
+    {
+        $properties = [];
+
+        foreach ($craftVariable->getComponents() as $key => $value) {
+            $type = gettype($value);
+            switch ($type) {
+                case 'object':
+                    $className    = get_class($value);
+                    $properties[$key] = $className;
+                    break;
+
+                case 'array':
+                    if (isset($value['class'])) {
+                        $properties[$key] = $value['class'];
+                    }
+                    break;
+
+                case 'string':
+                    $properties[$key] = $value;
+                    break;
+            }
+        }
+
+        return $properties;
     }
 }

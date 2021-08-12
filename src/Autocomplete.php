@@ -123,9 +123,11 @@ class Autocomplete extends Module implements BootstrapInterface
     public function generateAutocompleteTemplates()
     {
         $autocompleteGenerators = $this->getAllAutocompleteGenerators();
-        foreach($autocompleteGenerators as $generatorClass) {
-            /* @var Generator $generatorClass */
-            $generatorClass::generate();
+        foreach($autocompleteGenerators as $generatorClassName) {
+            /* @var \nystudio107\autocomplete\base\GeneratorInterface $generator */
+            $generator = Craft::$container->get($generatorClassName);
+            $generator->beforeGenerate();
+            $generator->generate();
         }
         Craft::info('Autocomplete templates generated',__METHOD__);
     }
@@ -137,8 +139,10 @@ class Autocomplete extends Module implements BootstrapInterface
     {
         $autocompleteGenerators = $this->getAllAutocompleteGenerators();
         foreach($autocompleteGenerators as $generatorClass) {
-            /* @var Generator $generatorClass */
-            $generatorClass::regenerate();
+            /* @var \nystudio107\autocomplete\base\GeneratorInterface $generator */
+            $generator = Craft::$container->get($generatorClass);
+            $generator->beforeGenerate();
+            $generator->regenerate();
         }
         Craft::info('Autocomplete templates regenerated',__METHOD__);
     }
