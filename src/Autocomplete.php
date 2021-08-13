@@ -23,6 +23,8 @@ use craft\events\RegisterComponentTypesEvent;
 use craft\services\Plugins;
 use craft\web\Application as CraftWebApp;
 
+use nystudio107\autocomplete\handlers\GenerateAutocompleteTemplates;
+use nystudio107\autocomplete\handlers\RegenerateAutocompleteTemplates;
 use yii\base\Application as YiiApp;
 use yii\base\BootstrapInterface;
 use yii\base\Event;
@@ -112,62 +114,10 @@ class Autocomplete extends Module implements BootstrapInterface
      */
     public function registerEventHandlers()
     {
-        Event::on(Plugins::class,Plugins::EVENT_AFTER_INSTALL_PLUGIN, [$this, 'regenerateAutocompleteTemplates']);
-        Event::on(Plugins::class,Plugins::EVENT_AFTER_UNINSTALL_PLUGIN, [$this, 'regenerateAutocompleteTemplates']);
-        Event::on(Plugins::class,Plugins::EVENT_AFTER_LOAD_PLUGINS, [$this, 'generateAutocompleteTemplates']);
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_INSTALL_PLUGIN, new RegenerateAutocompleteTemplates());
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_UNINSTALL_PLUGIN, new RegenerateAutocompleteTemplates());
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_LOAD_PLUGINS, new GenerateAutocompleteTemplates());
         Craft::info('Event Handlers installed',__METHOD__);
     }
 
-    /**
-     * Call each of the autocomplete generator classes to tell them to generate their templates if they don't exist already
-     */
-    public function generateAutocompleteTemplates()
-    {
-        $autocompleteGenerators = $this->getAllAutocompleteGenerators();
-        foreach($autocompleteGenerators as $generatorClassName) {
-            /* @var \nystudio107\autocomplete\base\GeneratorInterface $generator */
-            $generator = Craft::$container->get($generatorClassName);
-            $generator->beforeGenerate();
-            $generator->generate();
-        }
-        Craft::info('Autocomplete templates generated',__METHOD__);
-    }
-
-    /**
-     * Call each of the autocomplete generator classes to tell them to regenerate their templates from scratch
-     */
-    public function regenerateAutocompleteTemplates()
-    {
-        $autocompleteGenerators = $this->getAllAutocompleteGenerators();
-        foreach($autocompleteGenerators as $generatorClass) {
-            /* @var \nystudio107\autocomplete\base\GeneratorInterface $generator */
-            $generator = Craft::$container->get($generatorClass);
-            $generator->beforeGenerate();
-            $generator->regenerate();
-        }
-        Craft::info('Autocomplete templates regenerated',__METHOD__);
-    }
-
-    // Protected Methods
-    // =========================================================================
-
-    /**
-     * Returns all available autocomplete generator classes.
-     *
-     * @return string[] The available autocomplete generator classes
-     */
-    public function getAllAutocompleteGenerators(): array
-    {
-        if ($this->allAutocompleteGenerators) {
-            return $this->allAutocompleteGenerators;
-        }
-
-        $event = new RegisterComponentTypesEvent([
-            'types' => self::DEFAULT_AUTOCOMPLETE_GENERATORS
-        ]);
-        $this->trigger(self::EVENT_REGISTER_AUTOCOMPLETE_GENERATORS, $event);
-        $this->allAutocompleteGenerators = array_unique($event->types, SORT_REGULAR);
-
-        return $this->allAutocompleteGenerators;
-    }
 }
