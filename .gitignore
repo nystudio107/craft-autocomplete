@@ -12,6 +12,7 @@
 /build/*
 /yarn-error.log
 
+/tests/storage
 # MISC FILES
 .cache
 .DS_Store

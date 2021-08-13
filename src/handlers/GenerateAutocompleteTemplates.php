@@ -7,6 +7,7 @@ use craft\events\RegisterComponentTypesEvent;
 use nystudio107\autocomplete\Autocomplete;
 use nystudio107\autocomplete\base\GeneratorInterface;
 use yii\base\Event;
+use yii\di\NotInstantiableException;
 
 class GenerateAutocompleteTemplates
 {
@@ -53,10 +54,14 @@ class GenerateAutocompleteTemplates
     protected function resolve(string $class): GeneratorInterface
     {
         /* @var \nystudio107\autocomplete\base\GeneratorInterface $generator */
-        $generator = Craft::$container->get($class);
+        try {
+            $generator = Craft::$container->get($class);
+        } catch (NotInstantiableException $e) {
+            throw new \InvalidArgumentException("Unable to resolve '$class'");
+        }
 
         if (!($generator instanceof GeneratorInterface)) {
-            throw new \InvalidArgumentException("$class is no instance of GeneratorInterface");
+            throw new \InvalidArgumentException("Class '$class' is no instance of GeneratorInterface");
         }
 
         return $generator;

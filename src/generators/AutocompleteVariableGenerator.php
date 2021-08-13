@@ -12,6 +12,9 @@
 
 namespace nystudio107\autocomplete\generators;
 
+use craft\web\Application;
+use craft\web\twig\Environment;
+use craft\web\View;
 use nystudio107\autocomplete\base\Generator;
 
 use Craft;
@@ -25,6 +28,12 @@ use craft\web\twig\variables\CraftVariable;
 class AutocompleteVariableGenerator extends Generator
 {
     public CraftVariable $craftVariable;
+    public View $view;
+
+    public function __construct(View $view)
+    {
+        $this->view = $view;
+    }
 
     // Public Static Methods
     // =========================================================================
@@ -58,7 +67,9 @@ class AutocompleteVariableGenerator extends Generator
 
     public function beforeGenerate(): void
     {
-        $globals = Craft::$app->view->getTwig()->getGlobals();
+        //$globals = Craft::$app->view->getTwig()->getGlobals();
+        $globals = $this->view->getTwig()->getGlobals();
+
         if (!($globals['craft'] instanceof CraftVariable)) {
             throw new \InvalidArgumentException("Globals do not contain 'craft' CraftVariable.");
         }

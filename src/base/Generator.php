@@ -39,7 +39,7 @@ abstract class Generator implements GeneratorInterface
      */
     public function getGeneratorStubsPath(): string
     {
-        return Autocomplete::getInstance()->basePath . self::STUBS_DIR;
+        return realpath(__DIR__ . '/..' . self::STUBS_DIR);
     }
 
     /**
