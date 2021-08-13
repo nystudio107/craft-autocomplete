@@ -9,6 +9,12 @@ class RegenerateAutocompleteTemplates extends GenerateAutocompleteTemplates
 
     public function __invoke(\yii\base\Event $event): void
     {
+        $this->handle();
+        $event->handled = true;
+    }
+
+    public function handle(): void
+    {
         $autocompleteGenerators = $this->getAllGenerators();
 
         foreach($autocompleteGenerators as $class) {
@@ -18,5 +24,4 @@ class RegenerateAutocompleteTemplates extends GenerateAutocompleteTemplates
         }
         Craft::info('Autocomplete templates re-generated',__METHOD__);
     }
-
 }

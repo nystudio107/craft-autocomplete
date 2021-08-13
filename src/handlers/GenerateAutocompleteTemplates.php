@@ -13,6 +13,12 @@ class GenerateAutocompleteTemplates
 
     public function __invoke(\yii\base\Event $event): void
     {
+        $this->handle();
+        $event->handled = true;
+    }
+
+    public function handle(): void
+    {
         $autocompleteGenerators = $this->getAllGenerators();
 
         foreach($autocompleteGenerators as $class) {
@@ -22,6 +28,7 @@ class GenerateAutocompleteTemplates
         }
         Craft::info('Autocomplete templates generated',__METHOD__);
     }
+
 
     /**
      * Returns all available autocomplete generator classes.

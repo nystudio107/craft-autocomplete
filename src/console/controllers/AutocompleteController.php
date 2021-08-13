@@ -14,6 +14,8 @@ namespace nystudio107\autocomplete\console\controllers;
 
 use nystudio107\autocomplete\Autocomplete;
 
+use nystudio107\autocomplete\handlers\GenerateAutocompleteTemplates;
+use nystudio107\autocomplete\handlers\RegenerateAutocompleteTemplates;
 use yii\console\Controller;
 use yii\console\ExitCode;
 use yii\helpers\BaseConsole;
@@ -29,8 +31,10 @@ class AutocompleteController extends Controller
     public function actionGenerate(): int
     {
         $this->stdout('Generating autocomplete classes ... ', BaseConsole::FG_YELLOW);
-        /* @noinspection NullPointerExceptionInspection */
-        Autocomplete::getInstance()->generateAutocompleteTemplates();
+
+        $handler = new GenerateAutocompleteTemplates();
+        $handler->handle();
+
         $this->stdout('done' . PHP_EOL, BaseConsole::FG_GREEN);
 
         return ExitCode::OK;
@@ -42,8 +46,10 @@ class AutocompleteController extends Controller
     public function actionRegenerate(): int
     {
         $this->stdout('Regenerating autocomplete classes ... ', BaseConsole::FG_YELLOW);
-        /* @noinspection NullPointerExceptionInspection */
-        Autocomplete::getInstance()->regenerateAutocompleteTemplates();
+
+        $handler = new RegenerateAutocompleteTemplates();
+        $handler->handle();
+
         $this->stdout('done' . PHP_EOL, BaseConsole::FG_GREEN);
 
         return ExitCode::OK;
