@@ -80,7 +80,7 @@ class Autocomplete extends Module implements BootstrapInterface
     /**
      * Bootstraps the extension
      *
-     * @param YiiApp $app
+     * @param YiiApp|CraftWebApp|CraftConsoleApp $app
      */
     public function bootstrap($app)
     {
@@ -93,7 +93,7 @@ class Autocomplete extends Module implements BootstrapInterface
             return;
         }
         // Make sure we're in devMode
-        if (!Craft::$app->config->general->devMode) {
+        if (!$app->config->general->devMode) {
             return;
         }
 
@@ -101,9 +101,10 @@ class Autocomplete extends Module implements BootstrapInterface
         $this->registerEventHandlers();
 
         // Add our console controller
-        if (Craft::$app->request->isConsoleRequest) {
-            Craft::$app->controllerMap['autocomplete'] = AutocompleteController::class;
+        if ($app->request->isConsoleRequest) {
+            $app->controllerMap['autocomplete'] = AutocompleteController::class;
         }
+
     }
 
     /**
