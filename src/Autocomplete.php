@@ -161,15 +161,12 @@ class Autocomplete extends Module implements BootstrapInterface
         if ($this->allAutocompleteGenerators) {
             return $this->allAutocompleteGenerators;
         }
-        $autocompleteGenerators = array_unique(array_merge(
-            self::DEFAULT_AUTOCOMPLETE_GENERATORS
-        ), SORT_REGULAR);
 
         $event = new RegisterComponentTypesEvent([
-            'types' => $autocompleteGenerators
+            'types' => self::DEFAULT_AUTOCOMPLETE_GENERATORS
         ]);
         $this->trigger(self::EVENT_REGISTER_AUTOCOMPLETE_GENERATORS, $event);
-        $this->allAutocompleteGenerators = $event->types;
+        $this->allAutocompleteGenerators = array_unique($event->types, SORT_REGULAR);
 
         return $this->allAutocompleteGenerators;
     }
