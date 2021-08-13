@@ -36,8 +36,6 @@ use yii\base\Module;
  * @author    nystudio107
  * @package   Autocomplete
  * @since     1.0.0
- *
- * @property-read string[] $allAutocompleteGenerators
  */
 class Autocomplete extends Module implements BootstrapInterface
 {
@@ -70,11 +68,6 @@ class Autocomplete extends Module implements BootstrapInterface
         AutocompleteVariableGenerator::class,
         AutocompleteTwigExtensionGenerator::class,
     ];
-
-    // Private Properties
-    // =========================================================================
-
-    private $allAutocompleteGenerators;
 
     // Public Methods
     // =========================================================================
