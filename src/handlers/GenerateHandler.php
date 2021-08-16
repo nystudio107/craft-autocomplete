@@ -9,7 +9,7 @@ use nystudio107\autocomplete\base\GeneratorInterface;
 use yii\base\Event;
 use yii\di\NotInstantiableException;
 
-class GenerateAutocompleteTemplates
+class GenerateHandler
 {
 
     public function __invoke(\yii\base\Event $event): void

@@ -4,7 +4,7 @@ namespace nystudio107\autocomplete\handlers;
 
 use Craft;
 
-class RegenerateAutocompleteTemplates extends GenerateAutocompleteTemplates
+class RegenerateHandler extends GenerateHandler
 {
 
     public function __invoke(\yii\base\Event $event): void

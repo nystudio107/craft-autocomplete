@@ -23,8 +23,8 @@ use craft\events\RegisterComponentTypesEvent;
 use craft\services\Plugins;
 use craft\web\Application as CraftWebApp;
 
-use nystudio107\autocomplete\handlers\GenerateAutocompleteTemplates;
-use nystudio107\autocomplete\handlers\RegenerateAutocompleteTemplates;
+use nystudio107\autocomplete\handlers\GenerateHandler;
+use nystudio107\autocomplete\handlers\RegenerateHandler;
 use yii\base\Application as YiiApp;
 use yii\base\BootstrapInterface;
 use yii\base\Event;
@@ -107,9 +107,9 @@ class Autocomplete extends Module implements BootstrapInterface
      */
     public function registerEventHandlers()
     {
-        Event::on(Plugins::class,Plugins::EVENT_AFTER_INSTALL_PLUGIN, new RegenerateAutocompleteTemplates());
-        Event::on(Plugins::class,Plugins::EVENT_AFTER_UNINSTALL_PLUGIN, new RegenerateAutocompleteTemplates());
-        Event::on(Plugins::class,Plugins::EVENT_AFTER_LOAD_PLUGINS, new GenerateAutocompleteTemplates());
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_INSTALL_PLUGIN, new RegenerateHandler());
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_UNINSTALL_PLUGIN, new RegenerateHandler());
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_LOAD_PLUGINS, new GenerateHandler());
         Craft::info('Event Handlers installed',__METHOD__);
     }
 
