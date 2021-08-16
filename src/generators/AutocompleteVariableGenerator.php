@@ -19,7 +19,7 @@ use nystudio107\autocomplete\base\Generator;
 
 use Craft;
 use craft\web\twig\variables\CraftVariable;
-use nystudio107\autocomplete\generators\formatter\VariableFormatter;
+use nystudio107\autocomplete\generators\formatter\ComponentsFormatter;
 
 /**
  * @author    nystudio107
@@ -88,10 +88,10 @@ class AutocompleteVariableGenerator extends Generator
     private function generateInternal(): bool
     {
         $properties = [];
-        $components = (new VariableFormatter($this->craftVariable))->getPreparedProperties();
+        $formatter = new ComponentsFormatter($this->craftVariable);
 
         // Format the line output for each value
-        foreach ($components as $key => $value) {
+        foreach ($formatter->getPreparedComponents() as $key => $value) {
             $properties[] = ' * @property \\' . $value . ' $' . $key;
         }
 
@@ -99,32 +99,5 @@ class AutocompleteVariableGenerator extends Generator
         return $this->saveTemplate([
             '{{ properties }}' => implode(PHP_EOL, $properties),
         ]);
-    }
-
-    private function prepareProperties(CraftVariable $craftVariable) : array
-    {
-        $properties = [];
-
-        foreach ($craftVariable->getComponents() as $key => $value) {
-            $type = gettype($value);
-            switch ($type) {
-                case 'object':
-                    $className    = get_class($value);
-                    $properties[$key] = $className;
-                    break;
-
-                case 'array':
-                    if (isset($value['class'])) {
-                        $properties[$key] = $value['class'];
-                    }
-                    break;
-
-                case 'string':
-                    $properties[$key] = $value;
-                    break;
-            }
-        }
-
-        return $properties;
     }
 }

@@ -4,7 +4,7 @@ namespace nystudio107\autocomplete\generators\formatter;
 
 use craft\web\twig\variables\CraftVariable;
 
-class VariableFormatter
+class ComponentsFormatter
 {
     protected CraftVariable $variable;
 
@@ -13,7 +13,7 @@ class VariableFormatter
         $this->variable = $variable;
     }
 
-    public function getPreparedProperties(): array
+    public function getPreparedComponents(): array
     {
         $properties = [];
 

@@ -12,10 +12,15 @@
 
 namespace nystudio107\autocomplete\generators;
 
+use craft\elements\GlobalSet;
+use craft\elements\MatrixBlock;
+use craft\services\Elements;
 use nystudio107\autocomplete\base\Generator;
 
 use Craft;
 use craft\base\Element;
+use nystudio107\autocomplete\generators\formatter\TwigVariableFormatter;
+use yii\base\BaseObject;
 
 /**
  * @author    nystudio107
@@ -28,8 +33,8 @@ class AutocompleteTwigExtensionGenerator extends Generator
     // =========================================================================
 
     const ELEMENT_ROUTE_EXCLUDES = [
-        'matrixblock',
-        'globalset'
+        MatrixBlock::class,
+        GlobalSet::class
     ];
 
 
@@ -82,10 +87,17 @@ class AutocompleteTwigExtensionGenerator extends Generator
      */
     private function generateInternal(): bool
     {
+
+        $elementTypes = \Craft::$app->getElements()->getAllElementTypes();
+        $formatter = new TwigVariableFormatter(
+            array_diff($elementTypes, self::ELEMENT_ROUTE_EXCLUDES),
+            $this->globals
+        );
+
         // Mix in element route variables, and override values that should be used for autocompletion
         $values = array_merge(
-            $this->globalTwigVariables(),
-            $this->elementRouteVariables(),
+            $formatter->globalTwigVariables(),
+            $formatter->elementRouteVariables(),
             $this->overrideValues()
         );
 
@@ -99,63 +111,6 @@ class AutocompleteTwigExtensionGenerator extends Generator
         ]);
     }
 
-    private function globalTwigVariables() : array
-    {
-        $globals = [];
-
-        // Iterate through the globals in the Twig context
-        foreach ($this->globals as $key => $value) {
-            $type = gettype($value);
-            switch ($type) {
-                case 'object':
-                    $globals[$key] = 'new \\' . get_class($value) . '()';
-                    break;
-
-                case 'boolean':
-                    $globals[$key] = $value ? 'true' : 'false';
-                    break;
-
-                case 'integer':
-                case 'double':
-                    $values[$key] = $value;
-                    break;
-
-                case 'string':
-                    $globals[$key] = "'" . addslashes($value) . "'";
-                    break;
-
-                case 'array':
-                    $globals[$key] = '[]';
-                    break;
-
-                case 'NULL':
-                    $globals[$key] = 'null';
-                    break;
-            }
-        }
-
-        return $globals;
-    }
-
-    /**
-     * Add in the element types that could be injected as route variables
-     *
-     * @return array
-     */
-    private function elementRouteVariables(): array
-    {
-        $routeVariables = [];
-        $elementTypes = Craft::$app->elements->getAllElementTypes();
-        foreach ($elementTypes as $elementType) {
-            /* @var Element $elementType */
-            $key = $elementType::refHandle();
-            if (!empty($key) && !in_array($key, static::ELEMENT_ROUTE_EXCLUDES)) {
-                $routeVariables[$key] = 'new \\' . $elementType . '()';
-            }
-        }
-
-        return $routeVariables;
-    }
 
     /**
      * Override certain values that we always want hard-coded

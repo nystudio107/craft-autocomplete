@@ -14,4 +14,11 @@
 
 ## AutocompleteController class
 * Autocomplete::getInstance() instead of DI
-* 
+
+
+---
+
+## Why more classes? 
+
+The actual stuff we put into the subs wasn't testable. It was hidden in a private method of the generators.
+Now, with dedicated classes (`ComponentsFormatter`, `TwigVariableFormatter`) we can test it againsts different datasets, without the need to actually write the files.
