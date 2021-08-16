@@ -87,7 +87,6 @@ class AutocompleteTwigExtensionGenerator extends Generator
      */
     private function generateInternal(): bool
     {
-
         $elementTypes = \Craft::$app->getElements()->getAllElementTypes();
         $formatter = new TwigVariableFormatter(
             array_diff($elementTypes, self::ELEMENT_ROUTE_EXCLUDES),
