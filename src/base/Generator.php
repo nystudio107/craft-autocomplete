@@ -63,6 +63,17 @@ abstract class Generator implements GeneratorInterface
     {
     }
 
+    /**
+     * Return a path to the generated autocomplete template file
+     *
+     * @return string
+     */
+    public function getGeneratedFilePath(): string
+    {
+        return Craft::$app->getPath()->getCompiledClassesPath() . DIRECTORY_SEPARATOR . $this->getGeneratorName() . self::TEMPLATE_EXTENSION;
+    }
+
+
     // Protected Static Methods
     // =========================================================================
 
@@ -92,16 +103,6 @@ abstract class Generator implements GeneratorInterface
     protected function shouldRegenerateFile(): bool
     {
         return !is_file($this->getGeneratedFilePath());
-    }
-
-    /**
-     * Return a path to the generated autocomplete template file
-     *
-     * @return string
-     */
-    protected function getGeneratedFilePath(): string
-    {
-        return Craft::$app->getPath()->getCompiledClassesPath() . DIRECTORY_SEPARATOR . $this->getGeneratorName() . self::TEMPLATE_EXTENSION;
     }
 
     /**

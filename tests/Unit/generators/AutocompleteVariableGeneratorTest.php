@@ -4,6 +4,8 @@ use craft\helpers\FileHelper;
 use craft\web\twig\variables\CraftVariable;
 use nystudio107\autocomplete\generators\AutocompleteVariableGenerator;
 
+use function Spatie\Snapshots\assertMatchesSnapshot;
+
 afterEach(function () {
     FileHelper::clearDirectory(Craft::$app->getPath()->getCompiledClassesPath());
 });
@@ -43,5 +45,15 @@ test('beforeGenerate() fills craftVariable', function () {
 
     expect($varBeforeCall)->toBeNull();
     expect($varAfterCall)->toBeInstanceOf(CraftVariable::class);
+});
+
+test('template output with default data', function () {
+    $generator = new AutocompleteVariableGenerator(Craft::$app->getView());
+    $generator->beforeGenerate();
+    $generator->generate();
+
+    $contents = file_get_contents($generator->getGeneratedFilePath());
+
+    assertMatchesSnapshot($contents);
 });
 
