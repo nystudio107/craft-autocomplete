@@ -15,6 +15,7 @@ namespace nystudio107\autocomplete\generators;
 use craft\elements\GlobalSet;
 use craft\elements\MatrixBlock;
 use craft\services\Elements;
+use craft\web\View;
 use nystudio107\autocomplete\base\Generator;
 
 use Craft;
@@ -39,6 +40,12 @@ class AutocompleteTwigExtensionGenerator extends Generator
 
 
     public array $globals = [];
+    public View $view;
+
+    public function __construct(View $view)
+    {
+        $this->view = $view;
+    }
 
     // Public Methods
     // =========================================================================
@@ -76,7 +83,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
      */
     public function beforeGenerate(): void
     {
-        $this->globals = Craft::$app->view->getTwig()->getGlobals();
+        $this->globals = $this->view->getTwig()->getGlobals();
     }
 
 

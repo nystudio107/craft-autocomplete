@@ -9,7 +9,7 @@ afterEach(function () {
 
 
 test('can generate some file ', function () {
-    $generator = new AutocompleteTwigExtensionGenerator();
+    $generator = new AutocompleteTwigExtensionGenerator(Craft::$app->getView());
     $generator->beforeGenerate();
     $success = $generator->generate();
 
@@ -17,7 +17,7 @@ test('can generate some file ', function () {
 });
 
 test('do not generate if file exist', function () {
-    $generator = new AutocompleteTwigExtensionGenerator();
+    $generator = new AutocompleteTwigExtensionGenerator(Craft::$app->getView());
     $generator->beforeGenerate();
     $success1 = $generator->generate();
     $success2 = $generator->generate();
