@@ -29,7 +29,7 @@ abstract class Generator implements GeneratorInterface
     /**
      * @inheritDoc
      */
-    public static function getGeneratorName(): string
+    public function getGeneratorName(): string
     {
         return '';
     }
@@ -37,24 +37,42 @@ abstract class Generator implements GeneratorInterface
     /**
      * @inheritDoc
      */
-    public static function getGeneratorStubsPath(): string
+    public function getGeneratorStubsPath(): string
     {
-        return Autocomplete::getInstance()->basePath . self::STUBS_DIR;
+        return realpath(__DIR__ . '/..' . self::STUBS_DIR);
     }
 
     /**
      * @inheritDoc
      */
-    public static function generate()
+    public function beforeGenerate()
     {
     }
 
     /**
      * @inheritDoc
      */
-    public static function regenerate()
+    public function generate()
     {
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function regenerate()
+    {
+    }
+
+    /**
+     * Return a path to the generated autocomplete template file
+     *
+     * @return string
+     */
+    public function getGeneratedFilePath(): string
+    {
+        return Craft::$app->getPath()->getCompiledClassesPath() . DIRECTORY_SEPARATOR . $this->getGeneratorName() . self::TEMPLATE_EXTENSION;
+    }
+
 
     // Protected Static Methods
     // =========================================================================
@@ -65,13 +83,13 @@ abstract class Generator implements GeneratorInterface
      * @param array $vars key/value variables to be replaced in the stub
      * @return bool Whether the template was successfully saved
      */
-    protected static function saveTemplate(array $vars): bool
+    protected function saveTemplate(array $vars): bool
     {
-        $stub = file_get_contents(static::getStubFilePath());
+        $stub = file_get_contents($this->getStubFilePath());
         if ($stub) {
             $template = str_replace(array_keys($vars), array_values($vars), $stub);
 
-            return !(file_put_contents(static::getGeneratedFilePath(), $template) === false);
+            return !(file_put_contents($this->getGeneratedFilePath(), $template) === false);
         }
 
         return false;
@@ -82,19 +100,9 @@ abstract class Generator implements GeneratorInterface
      *
      * @return bool
      */
-    protected static function shouldRegenerateFile(): bool
+    protected function shouldRegenerateFile(): bool
     {
-        return !is_file(static::getGeneratedFilePath());
-    }
-
-    /**
-     * Return a path to the generated autocomplete template file
-     *
-     * @return string
-     */
-    protected static function getGeneratedFilePath(): string
-    {
-        return Craft::$app->getPath()->getCompiledClassesPath() . DIRECTORY_SEPARATOR . static::getGeneratorName() . self::TEMPLATE_EXTENSION;
+        return !is_file($this->getGeneratedFilePath());
     }
 
     /**
@@ -102,7 +110,7 @@ abstract class Generator implements GeneratorInterface
      *
      * @return string
      */
-    protected static function getStubFilePath(): string
+    protected function getStubFilePath(): string
     {
         return static::getGeneratorStubsPath() . DIRECTORY_SEPARATOR . static::getGeneratorName() . self::STUBS_EXTENSION;
     }

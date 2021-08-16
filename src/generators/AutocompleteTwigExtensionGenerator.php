@@ -12,10 +12,16 @@
 
 namespace nystudio107\autocomplete\generators;
 
+use craft\elements\GlobalSet;
+use craft\elements\MatrixBlock;
+use craft\services\Elements;
+use craft\web\View;
 use nystudio107\autocomplete\base\Generator;
 
 use Craft;
 use craft\base\Element;
+use nystudio107\autocomplete\generators\formatter\TwigVariableFormatter;
+use yii\base\BaseObject;
 
 /**
  * @author    nystudio107
@@ -28,17 +34,26 @@ class AutocompleteTwigExtensionGenerator extends Generator
     // =========================================================================
 
     const ELEMENT_ROUTE_EXCLUDES = [
-        'matrixblock',
-        'globalset'
+        MatrixBlock::class,
+        GlobalSet::class
     ];
 
-    // Public Static Methods
+
+    public array $globals = [];
+    public View $view;
+
+    public function __construct(View $view)
+    {
+        $this->view = $view;
+    }
+
+    // Public Methods
     // =========================================================================
 
     /**
      * @inheritDoc
      */
-    public static function getGeneratorName(): string
+    public function getGeneratorName(): string
     {
         return 'AutocompleteTwigExtension';
     }
@@ -46,20 +61,31 @@ class AutocompleteTwigExtensionGenerator extends Generator
     /**
      * @inheritDoc
      */
-    public static function generate()
+    public function generate(): bool
     {
-        if (self::shouldRegenerateFile()) {
-            static::generateInternal();
+        if ($this->shouldRegenerateFile()) {
+            return $this->generateInternal();
         }
+        return false;
     }
 
     /**
      * @inheritDoc
      */
-    public static function regenerate()
+    public function regenerate(): bool
     {
-        self::generateInternal();
+        return $this->generateInternal();
     }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function beforeGenerate(): void
+    {
+        $this->globals = $this->view->getTwig()->getGlobals();
+    }
+
 
     // Private Static Methods
     // =========================================================================
@@ -67,83 +93,38 @@ class AutocompleteTwigExtensionGenerator extends Generator
     /**
      * Core function that generates the autocomplete class
      */
-    private static function generateInternal()
+    private function generateInternal(): bool
     {
-        $values = [];
-        // Iterate through the globals in the Twig context
-        /* @noinspection PhpInternalEntityUsedInspection */
-        $globals = Craft::$app->view->getTwig()->getGlobals();
-        foreach ($globals as $key => $value) {
-            $type = gettype($value);
-            switch ($type) {
-                case 'object':
-                    $values[$key] = 'new \\' . get_class($value) . '()';
-                    break;
+        $elementTypes = \Craft::$app->getElements()->getAllElementTypes();
+        $formatter = new TwigVariableFormatter(
+            array_diff($elementTypes, self::ELEMENT_ROUTE_EXCLUDES),
+            $this->globals
+        );
 
-                case 'boolean':
-                    $values[$key] = $value ? 'true' : 'false';
-                    break;
-
-                case 'integer':
-                case 'double':
-                    $values[$key] = $value;
-                    break;
-
-                case 'string':
-                    $values[$key] = "'" . addslashes($value) . "'";
-                    break;
-
-                case 'array':
-                    $values[$key] = '[]';
-                    break;
-
-                case 'NULL':
-                    $values[$key] = 'null';
-                    break;
-            }
-        }
         // Mix in element route variables, and override values that should be used for autocompletion
         $values = array_merge(
-            $values,
-            static::elementRouteVariables(),
-            static::overrideValues()
+            $formatter->globalTwigVariables(),
+            $formatter->elementRouteVariables(),
+            $this->overrideValues()
         );
+
         // Format the line output for each value
         foreach ($values as $key => $value) {
             $values[$key] = "            '" . $key . "' => " . $value . ",";
         }
         // Save the template with variable substitution
-        self::saveTemplate([
+        return $this->saveTemplate([
             '{{ globals }}' => implode(PHP_EOL, $values),
         ]);
     }
 
-    /**
-     * Add in the element types that could be injected as route variables
-     *
-     * @return array
-     */
-    private static function elementRouteVariables(): array
-    {
-        $routeVariables = [];
-        $elementTypes = Craft::$app->elements->getAllElementTypes();
-        foreach ($elementTypes as $elementType) {
-            /* @var Element $elementType */
-            $key = $elementType::refHandle();
-            if (!empty($key) && !in_array($key, static::ELEMENT_ROUTE_EXCLUDES)) {
-                $routeVariables[$key] = 'new \\' . $elementType . '()';
-            }
-        }
-
-        return $routeVariables;
-    }
 
     /**
      * Override certain values that we always want hard-coded
      *
      * @return array
      */
-    private static function overrideValues(): array
+    private function overrideValues(): array
     {
         return [
             // Swap in our variable in place of the `craft` variable

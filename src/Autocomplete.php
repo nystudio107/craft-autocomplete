@@ -23,6 +23,8 @@ use craft\events\RegisterComponentTypesEvent;
 use craft\services\Plugins;
 use craft\web\Application as CraftWebApp;
 
+use nystudio107\autocomplete\handlers\GenerateHandler;
+use nystudio107\autocomplete\handlers\RegenerateHandler;
 use yii\base\Application as YiiApp;
 use yii\base\BootstrapInterface;
 use yii\base\Event;
@@ -34,8 +36,6 @@ use yii\base\Module;
  * @author    nystudio107
  * @package   Autocomplete
  * @since     1.0.0
- *
- * @property-read string[] $allAutocompleteGenerators
  */
 class Autocomplete extends Module implements BootstrapInterface
 {
@@ -69,18 +69,13 @@ class Autocomplete extends Module implements BootstrapInterface
         AutocompleteTwigExtensionGenerator::class,
     ];
 
-    // Private Properties
-    // =========================================================================
-
-    private $allAutocompleteGenerators;
-
     // Public Methods
     // =========================================================================
 
     /**
      * Bootstraps the extension
      *
-     * @param YiiApp $app
+     * @param YiiApp|CraftWebApp|CraftConsoleApp $app
      */
     public function bootstrap($app)
     {
@@ -93,7 +88,7 @@ class Autocomplete extends Module implements BootstrapInterface
             return;
         }
         // Make sure we're in devMode
-        if (!Craft::$app->config->general->devMode) {
+        if (!$app->config->general->devMode) {
             return;
         }
 
@@ -101,9 +96,10 @@ class Autocomplete extends Module implements BootstrapInterface
         $this->registerEventHandlers();
 
         // Add our console controller
-        if (Craft::$app->request->isConsoleRequest) {
-            Craft::$app->controllerMap['autocomplete'] = AutocompleteController::class;
+        if ($app->request->isConsoleRequest) {
+            $app->controllerMap['autocomplete'] = AutocompleteController::class;
         }
+
     }
 
     /**
@@ -111,61 +107,10 @@ class Autocomplete extends Module implements BootstrapInterface
      */
     public function registerEventHandlers()
     {
-        Event::on(Plugins::class,Plugins::EVENT_AFTER_INSTALL_PLUGIN, [$this, 'regenerateAutocompleteTemplates']);
-        Event::on(Plugins::class,Plugins::EVENT_AFTER_UNINSTALL_PLUGIN, [$this, 'regenerateAutocompleteTemplates']);
-        Event::on(Plugins::class,Plugins::EVENT_AFTER_LOAD_PLUGINS, [$this, 'generateAutocompleteTemplates']);
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_INSTALL_PLUGIN, new RegenerateHandler());
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_UNINSTALL_PLUGIN, new RegenerateHandler());
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_LOAD_PLUGINS, new GenerateHandler());
         Craft::info('Event Handlers installed',__METHOD__);
     }
 
-    /**
-     * Call each of the autocomplete generator classes to tell them to generate their templates if they don't exist already
-     */
-    public function generateAutocompleteTemplates()
-    {
-        $autocompleteGenerators = $this->getAllAutocompleteGenerators();
-        foreach($autocompleteGenerators as $generatorClass) {
-            /* @var Generator $generatorClass */
-            $generatorClass::generate();
-        }
-        Craft::info('Autocomplete templates generated',__METHOD__);
-    }
-
-    /**
-     * Call each of the autocomplete generator classes to tell them to regenerate their templates from scratch
-     */
-    public function regenerateAutocompleteTemplates()
-    {
-        $autocompleteGenerators = $this->getAllAutocompleteGenerators();
-        foreach($autocompleteGenerators as $generatorClass) {
-            /* @var Generator $generatorClass */
-            $generatorClass::regenerate();
-        }
-        Craft::info('Autocomplete templates regenerated',__METHOD__);
-    }
-
-    // Protected Methods
-    // =========================================================================
-
-    /**
-     * Returns all available autocomplete generator classes.
-     *
-     * @return string[] The available autocomplete generator classes
-     */
-    public function getAllAutocompleteGenerators(): array
-    {
-        if ($this->allAutocompleteGenerators) {
-            return $this->allAutocompleteGenerators;
-        }
-        $autocompleteGenerators = array_unique(array_merge(
-            self::DEFAULT_AUTOCOMPLETE_GENERATORS
-        ), SORT_REGULAR);
-
-        $event = new RegisterComponentTypesEvent([
-            'types' => $autocompleteGenerators
-        ]);
-        $this->trigger(self::EVENT_REGISTER_AUTOCOMPLETE_GENERATORS, $event);
-        $this->allAutocompleteGenerators = $event->types;
-
-        return $this->allAutocompleteGenerators;
-    }
 }

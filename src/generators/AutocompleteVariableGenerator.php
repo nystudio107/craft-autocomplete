@@ -12,10 +12,14 @@
 
 namespace nystudio107\autocomplete\generators;
 
+use craft\web\Application;
+use craft\web\twig\Environment;
+use craft\web\View;
 use nystudio107\autocomplete\base\Generator;
 
 use Craft;
 use craft\web\twig\variables\CraftVariable;
+use nystudio107\autocomplete\generators\formatter\ComponentsFormatter;
 
 /**
  * @author    nystudio107
@@ -24,13 +28,21 @@ use craft\web\twig\variables\CraftVariable;
  */
 class AutocompleteVariableGenerator extends Generator
 {
+    public ?CraftVariable $craftVariable = null;
+    public View $view;
+
+    public function __construct(View $view)
+    {
+        $this->view = $view;
+    }
+
     // Public Static Methods
     // =========================================================================
 
     /**
      * @inheritDoc
      */
-    public static function getGeneratorName(): string
+    public function getGeneratorName(): string
     {
         return 'AutocompleteVariable';
     }
@@ -38,64 +50,54 @@ class AutocompleteVariableGenerator extends Generator
     /**
      * @inheritDoc
      */
-    public static function generate()
+    public function generate(): bool
     {
-        if (self::shouldRegenerateFile()) {
-            static::generateInternal();
+        if ($this->shouldRegenerateFile()) {
+            return $this->generateInternal();
         }
+        return false;
     }
 
     /**
      * @inheritDoc
      */
-    public static function regenerate()
+    public function regenerate(): bool
     {
-        static::generateInternal();
+        return $this->generateInternal();
     }
 
-    // Private Static Methods
+    public function beforeGenerate(): void
+    {
+        //$globals = Craft::$app->view->getTwig()->getGlobals();
+        $globals = $this->view->getTwig()->getGlobals();
+
+        if (!($globals['craft'] instanceof CraftVariable)) {
+            throw new \InvalidArgumentException("Globals do not contain 'craft' CraftVariable.");
+        }
+
+        $this->craftVariable =  $globals['craft'];
+    }
+
+
+    // Private Methods
     // =========================================================================
 
     /**
      * Core function that generates the autocomplete class
      */
-    private static function generateInternal()
+    private function generateInternal(): bool
     {
-        $values = [];
-        /* @noinspection PhpInternalEntityUsedInspection */
-        $globals = Craft::$app->view->getTwig()->getGlobals();
-        /* @var CraftVariable $craftVariable */
-        if (isset($globals['craft'])) {
-            $craftVariable = $globals['craft'];
-            foreach ($craftVariable->getComponents() as $key => $value) {
-                $type = gettype($value);
-                switch ($type) {
-                    case 'object':
-                        $className = get_class($value);
-                        $values[$key] = $className;
-                        break;
-
-                    case 'array':
-                        if (isset($value['class'])) {
-                            $values[$key] = $value['class'];
-                        }
-                        break;
-
-                    case 'string':
-                        $values[$key] = $value;
-                        break;
-                }
-            }
-        }
+        $properties = [];
+        $formatter = new ComponentsFormatter($this->craftVariable);
 
         // Format the line output for each value
-        foreach ($values as $key => $value) {
-            $values[$key] = ' * @property \\' . $value . ' $' . $key;
+        foreach ($formatter->getPreparedComponents() as $key => $value) {
+            $properties[] = ' * @property \\' . $value . ' $' . $key;
         }
 
         // Save the template with variable substitution
-        self::saveTemplate([
-            '{{ properties }}' => implode(PHP_EOL, $values),
+        return $this->saveTemplate([
+            '{{ properties }}' => implode(PHP_EOL, $properties),
         ]);
     }
 }

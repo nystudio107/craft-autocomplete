@@ -12,12 +12,14 @@
 /build/*
 /yarn-error.log
 
+/tests/storage
 # MISC FILES
 .cache
 .DS_Store
 .idea
 .project
 .settings
+.phpunit.result.cache
 *.esproj
 *.sublime-workspace
 *.sublime-project
