@@ -19,6 +19,7 @@ use nystudio107\autocomplete\base\Generator;
 
 use Craft;
 use craft\web\twig\variables\CraftVariable;
+use nystudio107\autocomplete\generators\formatter\VariableFormatter;
 
 /**
  * @author    nystudio107
@@ -27,7 +28,7 @@ use craft\web\twig\variables\CraftVariable;
  */
 class AutocompleteVariableGenerator extends Generator
 {
-    public CraftVariable $craftVariable;
+    public ?CraftVariable $craftVariable = null;
     public View $view;
 
     public function __construct(View $view)
@@ -87,9 +88,10 @@ class AutocompleteVariableGenerator extends Generator
     private function generateInternal(): bool
     {
         $properties = [];
+        $components = (new VariableFormatter($this->craftVariable))->getPreparedProperties();
 
         // Format the line output for each value
-        foreach ($this->prepareProperties($this->craftVariable) as $key => $value) {
+        foreach ($components as $key => $value) {
             $properties[] = ' * @property \\' . $value . ' $' . $key;
         }
 

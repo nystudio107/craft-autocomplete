@@ -1,7 +1,12 @@
 <?php
 
+use craft\helpers\FileHelper;
 use nystudio107\autocomplete\Autocomplete;
 use nystudio107\autocomplete\handlers\GenerateHandler;
+
+afterEach(function () {
+    FileHelper::clearDirectory(Craft::$app->getPath()->getCompiledClassesPath());
+});
 
 test('can get default generators', function () {
     $handler = new GenerateHandler();

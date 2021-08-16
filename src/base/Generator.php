@@ -101,7 +101,7 @@ abstract class Generator implements GeneratorInterface
      */
     protected function getGeneratedFilePath(): string
     {
-        return Craft::$app->getPath()->getCompiledClassesPath() . DIRECTORY_SEPARATOR . static::getGeneratorName() . self::TEMPLATE_EXTENSION;
+        return Craft::$app->getPath()->getCompiledClassesPath() . DIRECTORY_SEPARATOR . $this->getGeneratorName() . self::TEMPLATE_EXTENSION;
     }
 
     /**
