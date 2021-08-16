@@ -54,11 +54,12 @@ class AutocompleteTwigExtensionGenerator extends Generator
     /**
      * @inheritDoc
      */
-    public function generate()
+    public function generate(): bool
     {
         if ($this->shouldRegenerateFile()) {
-            $this->generateInternal();
+            return $this->generateInternal();
         }
+        return false;
     }
 
     /**

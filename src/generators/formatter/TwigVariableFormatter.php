@@ -36,7 +36,7 @@ class TwigVariableFormatter
 
                 case 'integer':
                 case 'double':
-                    $values[$key] = $value;
+                    $globals[$key] = $value;
                     break;
 
                 case 'string':
