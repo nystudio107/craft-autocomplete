@@ -84,9 +84,7 @@ abstract class Generator implements GeneratorInterface
      */
     protected static function shouldRegenerateFile(): bool
     {
-        $path = static::getGeneratedFilePath();
-
-        return !is_file($path);
+        return !is_file(static::getGeneratedFilePath());
     }
 
     /**
