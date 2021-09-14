@@ -27,6 +27,8 @@ class AutocompleteTwigExtensionGenerator extends Generator
     // const
     // =========================================================================
 
+    const COMMERCE_PLUGIN_HANDLE = 'commerce';
+
     const ELEMENT_ROUTE_EXCLUDES = [
         'matrixblock',
         'globalset'
@@ -145,13 +147,28 @@ class AutocompleteTwigExtensionGenerator extends Generator
      */
     private static function overrideValues(): array
     {
-        return [
+        $result = [
             // Swap in our variable in place of the `craft` variable
             'craft' => 'new \nystudio107\autocomplete\variables\AutocompleteVariable()',
             // Set the current user to a new user, so it is never `null`
             'currentUser' => 'new \craft\elements\User()',
+            // Craft core route variables
+            'asset' => 'new \craft\elements\Asset()',
+            'category' => 'new \craft\elements\Category()',
+            'entry' => 'new \craft\elements\Entry()',
+            'tag' => 'new \craft\elements\Tag()',
             // Set the nonce to a blank string, as it changes on every request
             'nonce' => "''",
         ];
+        if (Craft::$app->getPlugins()->getPlugin(self::COMMERCE_PLUGIN_HANDLE)) {
+            $result = array_merge($result, [
+                // Commerce route variables
+                'lineItem' => 'new \craft\commerce\models\LineItem()',
+                'order' => 'new \craft\commerce\elements\Order()',
+                'product' => 'new \craft\commerce\elements\Product()',
+            ]);
+        }
+
+        return  $result;
     }
 }
