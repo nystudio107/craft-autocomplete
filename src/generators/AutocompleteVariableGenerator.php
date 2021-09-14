@@ -17,6 +17,8 @@ use nystudio107\autocomplete\base\Generator;
 use Craft;
 use craft\web\twig\variables\CraftVariable;
 
+use yii\base\InvalidConfigException;
+
 /**
  * @author    nystudio107
  * @package   autocomplete
@@ -68,22 +70,14 @@ class AutocompleteVariableGenerator extends Generator
         if (isset($globals['craft'])) {
             $craftVariable = $globals['craft'];
             foreach ($craftVariable->getComponents() as $key => $value) {
-                $type = gettype($value);
-                switch ($type) {
-                    case 'object':
-                        $className = get_class($value);
-                        $values[$key] = $className;
-                        break;
-
-                    case 'array':
-                        if (isset($value['class'])) {
-                            $values[$key] = $value['class'];
-                        }
-                        break;
-
-                    case 'string':
-                        $values[$key] = $value;
-                        break;
+                $componentObject = null;
+                try {
+                    $componentObject = $craftVariable->get($key);
+                } catch (InvalidConfigException $e) {
+                    // That's okay
+                }
+                if ($componentObject) {
+                    $values[$key] = get_class($componentObject);
                 }
             }
         }
