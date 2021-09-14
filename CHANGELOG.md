@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.0.3 - UNRELEASED
+### Changed
+* Clean up AutocompleteVariableGenerator to `get()` the components to load them
+
 ## 1.0.2 - 2021-09-02
 ### Changed
 * Code cleanup, removed vestigial code
