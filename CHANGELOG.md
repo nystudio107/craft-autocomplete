@@ -2,10 +2,6 @@
 
 All notable changes to this project will be documented in this file.
 
-## 1.0.3 - 2021-09-14
-### Changed
-* Added back in Craft core & Commerce route variables (`entry`, `category`, `product`, etc.) for autocompletion
-
 ## 1.0.2 - 2021-09-02
 ### Changed
 * Code cleanup, removed vestigial code
