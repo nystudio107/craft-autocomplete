@@ -70,14 +70,10 @@ class AutocompleteVariableGenerator extends Generator
         if (isset($globals['craft'])) {
             $craftVariable = $globals['craft'];
             foreach ($craftVariable->getComponents() as $key => $value) {
-                $componentObject = null;
                 try {
-                    $componentObject = $craftVariable->get($key);
-                } catch (InvalidConfigException $e) {
+                    $values[$key] = get_class($craftVariable->get($key));
+                } catch (\Throwable $e) {
                     // That's okay
-                }
-                if ($componentObject) {
-                    $values[$key] = get_class($componentObject);
                 }
             }
         }
