@@ -30,7 +30,7 @@ class AutocompleteController extends Controller
     {
         $this->stdout('Generating autocomplete classes ... ', BaseConsole::FG_YELLOW);
         /* @noinspection NullPointerExceptionInspection */
-        Autocomplete::getInstance()->generateAutocompleteTemplates();
+        Autocomplete::getInstance()->generateAutocompleteClasses();
         $this->stdout('done' . PHP_EOL, BaseConsole::FG_GREEN);
 
         return ExitCode::OK;
@@ -43,7 +43,7 @@ class AutocompleteController extends Controller
     {
         $this->stdout('Regenerating autocomplete classes ... ', BaseConsole::FG_YELLOW);
         /* @noinspection NullPointerExceptionInspection */
-        Autocomplete::getInstance()->regenerateAutocompleteTemplates();
+        Autocomplete::getInstance()->regenerateAutocompleteClasses();
         $this->stdout('done' . PHP_EOL, BaseConsole::FG_GREEN);
 
         return ExitCode::OK;
