@@ -111,36 +111,49 @@ class Autocomplete extends Module implements BootstrapInterface
      */
     public function registerEventHandlers()
     {
-        Event::on(Plugins::class,Plugins::EVENT_AFTER_INSTALL_PLUGIN, [$this, 'regenerateAutocompleteTemplates']);
-        Event::on(Plugins::class,Plugins::EVENT_AFTER_UNINSTALL_PLUGIN, [$this, 'regenerateAutocompleteTemplates']);
-        Event::on(Plugins::class,Plugins::EVENT_AFTER_LOAD_PLUGINS, [$this, 'generateAutocompleteTemplates']);
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_INSTALL_PLUGIN, [$this, 'regenerateAutocompleteClasses']);
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_UNINSTALL_PLUGIN, [$this, 'deleteAutocompleteClasses']);
+        Event::on(Plugins::class,Plugins::EVENT_AFTER_LOAD_PLUGINS, [$this, 'generateAutocompleteClasses']);
         Craft::info('Event Handlers installed',__METHOD__);
     }
 
     /**
-     * Call each of the autocomplete generator classes to tell them to generate their templates if they don't exist already
+     * Call each of the autocomplete generator classes to tell them to generate their classes if they don't exist already
      */
-    public function generateAutocompleteTemplates()
+    public function generateAutocompleteClasses()
     {
         $autocompleteGenerators = $this->getAllAutocompleteGenerators();
         foreach($autocompleteGenerators as $generatorClass) {
             /* @var Generator $generatorClass */
             $generatorClass::generate();
         }
-        Craft::info('Autocomplete templates generated',__METHOD__);
+        Craft::info('Autocomplete classes generated',__METHOD__);
     }
 
     /**
-     * Call each of the autocomplete generator classes to tell them to regenerate their templates from scratch
+     * Call each of the autocomplete generator classes to tell them to regenerate their classes from scratch
      */
-    public function regenerateAutocompleteTemplates()
+    public function regenerateAutocompleteClasses()
     {
         $autocompleteGenerators = $this->getAllAutocompleteGenerators();
         foreach($autocompleteGenerators as $generatorClass) {
             /* @var Generator $generatorClass */
             $generatorClass::regenerate();
         }
-        Craft::info('Autocomplete templates regenerated',__METHOD__);
+        Craft::info('Autocomplete classes regenerated',__METHOD__);
+    }
+
+    /**
+     * Call each of the autocomplete generator classes to tell them to delete their classes
+     */
+    public function deleteAutocompleteClasses()
+    {
+        $autocompleteGenerators = $this->getAllAutocompleteGenerators();
+        foreach($autocompleteGenerators as $generatorClass) {
+            /* @var Generator $generatorClass */
+            $generatorClass::delete();
+        }
+        Craft::info('Autocomplete classes deleted',__METHOD__);
     }
 
     // Protected Methods

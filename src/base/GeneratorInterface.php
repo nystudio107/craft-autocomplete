@@ -52,4 +52,9 @@ interface GeneratorInterface
      * Regenerate the autocomplete classes from scratch
      */
     public static function regenerate();
+
+    /**
+     * Delete the autocomplete classes
+     */
+    public static function delete();
 }

@@ -2,9 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
-## 1.0.3 - UNRELEASED
+## 1.0.3 - Unreleased
 ### Changed
 * Clean up AutocompleteVariableGenerator to `get()` the components to load them
+
+### Fixed
+* Fixed an error that could be thrown when a plugin was uninstalled that contained references in the Twig context.
 
 ## 1.0.2 - 2021-09-02
 ### Changed

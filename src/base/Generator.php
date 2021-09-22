@@ -56,6 +56,14 @@ abstract class Generator implements GeneratorInterface
     {
     }
 
+    /**
+     * @inheritDoc
+     */
+    public static function delete()
+    {
+        unlink(static::getGeneratedFilePath());
+    }
+
     // Protected Static Methods
     // =========================================================================
 
