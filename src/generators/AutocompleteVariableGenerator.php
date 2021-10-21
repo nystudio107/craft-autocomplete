@@ -26,6 +26,14 @@ use yii\base\InvalidConfigException;
  */
 class AutocompleteVariableGenerator extends Generator
 {
+
+    // const
+    // =========================================================================
+
+    const BEHAVIOR_PROPERTY_EXCLUDES = [
+        'owner',
+    ];
+
     // Public Static Methods
     // =========================================================================
 
@@ -69,11 +77,25 @@ class AutocompleteVariableGenerator extends Generator
         /* @var CraftVariable $craftVariable */
         if (isset($globals['craft'])) {
             $craftVariable = $globals['craft'];
+            // Handle the components
             foreach ($craftVariable->getComponents() as $key => $value) {
                 try {
                     $values[$key] = get_class($craftVariable->get($key));
                 } catch (\Throwable $e) {
                     // That's okay
+                }
+            }
+            // Handle the behaviors
+            foreach ($craftVariable->getBehaviors() as $behavior) {
+                $properties = get_object_vars($behavior);
+                foreach ($properties as $key => $value) {
+                    try {
+                        if (is_object($value) && !in_array($key, static::BEHAVIOR_PROPERTY_EXCLUDES, true)) {
+                            $values[$key] = get_class($value);
+                        }
+                    } catch (\Throwable $e) {
+                        // That's okay
+                    }
                 }
             }
         }
