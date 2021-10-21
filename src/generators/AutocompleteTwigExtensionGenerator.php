@@ -132,7 +132,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
         foreach ($elementTypes as $elementType) {
             /* @var Element $elementType */
             $key = $elementType::refHandle();
-            if (!empty($key) && !in_array($key, static::ELEMENT_ROUTE_EXCLUDES)) {
+            if (!empty($key) && !in_array($key, static::ELEMENT_ROUTE_EXCLUDES, true)) {
                 $routeVariables[$key] = 'new \\' . $elementType . '()';
             }
         }
