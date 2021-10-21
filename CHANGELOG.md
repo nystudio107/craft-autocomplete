@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.0.4 - 2021.10.21
+### Added
+* Added support for plugins like Craft Commerce that add to the Craft variable via behaviors ([#6](https://github.com/nystudio107/craft-autocomplete/issues/6))
+
 ## 1.0.3 - 2021.09.22
 ### Changed
 * Clean up AutocompleteVariableGenerator to `get()` the components to load them
