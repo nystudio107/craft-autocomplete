@@ -23,7 +23,7 @@ This plugin requires Craft CMS 3.0.0 or later.
 composer require nystudio107/craft-autocomplete --dev
 ```
 
-2. Ensure that the [Symfony Support plugin](https://plugins.jetbrains.com/plugin/7219-symfony-plugin) for PhpStorm is installed and enabled.  
+2. Ensure that the [Symfony Support plugin](https://plugins.jetbrains.com/plugin/7219-symfony-plugin) for PhpStorm is installed and enabled by checking the **Enabled for Project** checkbox in the Symfony plugin settings.  
     
 3. Ensure that `devMode` is enabled.
 
