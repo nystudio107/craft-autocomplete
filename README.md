@@ -17,10 +17,10 @@ This plugin requires Craft CMS 3.0.0 or later.
 
 ## Usage
 
-1. Install the package using composer.
+1. Install the package using composer, adding it to `require-dev`:
 
 ```shell
-composer require nystudio107/craft-autocomplete
+composer require nystudio107/craft-autocomplete --dev
 ```
 
 2. Ensure that the [Symfony Support plugin](https://plugins.jetbrains.com/plugin/7219-symfony-plugin) for PhpStorm is installed and enabled.  
