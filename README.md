@@ -162,7 +162,7 @@ class AutocompleteTwigExtension extends \Twig\Extension\AbstractExtension implem
             'currentUser' => new \craft\elements\User(),
             // ...
             'seomatic' => new \nystudio107\seomatic\variables\SeomaticVariable(),
-            'sprig' => new \putyourlightson\sprig\variables\SprigVariable(),
+            'sprig' => new \putyourlightson\sprigcore\variables\SprigVariable(),
         ];
     }
 }

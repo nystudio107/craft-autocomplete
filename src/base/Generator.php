@@ -23,6 +23,27 @@ use Craft;
  */
 abstract class Generator implements GeneratorInterface
 {
+    // Constants
+    // =========================================================================
+
+    /**
+     * @event Event The event that is triggered before generating autocomplete classes.
+     *
+     * ```php
+     * use nystudio107\autocomplete\events\DefineGeneratorValuesEvent;
+     * use nystudio107\autocomplete\generators\AutocompleteTwigExtensionGenerator;
+     * use yii\base\Event;
+     *
+     * Event::on(AutocompleteTwigExtensionGenerator::class,
+     *     AutocompleteTwigExtensionGenerator::EVENT_BEFORE_GENERATE,
+     *     function(DefineGeneratorValuesEvent $event) {
+     *         $event->values['myVariable'] = 'value';
+     *     }
+     * );
+     * ```
+     */
+    const EVENT_BEFORE_GENERATE = 'beforeGenerate';
+
     // Public Static Methods
     // =========================================================================
 

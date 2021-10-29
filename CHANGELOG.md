@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.0.5 - Unreleased
+### Added
+* Added the `beforeGenerate` event to the base `Generator` class ([#7](https://github.com/nystudio107/craft-autocomplete/issues/7)).
+* 
 ## 1.0.4 - 2021.10.21
 ### Added
 * Added support for plugins like Craft Commerce that add to the Craft variable via behaviors ([#6](https://github.com/nystudio107/craft-autocomplete/issues/6))
@@ -11,7 +15,7 @@ All notable changes to this project will be documented in this file.
 * Clean up AutocompleteVariableGenerator to `get()` the components to load them
 
 ### Fixed
-* Fixed an error that could be thrown when a plugin was uninstalled that contained references in the Twig context. ([#5](https://github.com/nystudio107/craft-autocomplete/issues/5))
+* Fixed an error that could be thrown when a plugin was uninstalled that contained references in the Twig context ([#5](https://github.com/nystudio107/craft-autocomplete/issues/5)).
 
 ## 1.0.2 - 2021-09-02
 ### Changed

@@ -17,7 +17,9 @@ use nystudio107\autocomplete\base\Generator;
 use Craft;
 use craft\web\twig\variables\CraftVariable;
 
-use yii\base\InvalidConfigException;
+use nystudio107\autocomplete\events\DefineGeneratorValuesEvent;
+use Throwable;
+use yii\base\Event;
 
 /**
  * @author    nystudio107
@@ -81,7 +83,7 @@ class AutocompleteVariableGenerator extends Generator
             foreach ($craftVariable->getComponents() as $key => $value) {
                 try {
                     $values[$key] = get_class($craftVariable->get($key));
-                } catch (\Throwable $e) {
+                } catch (Throwable $e) {
                     // That's okay
                 }
             }
@@ -99,6 +101,13 @@ class AutocompleteVariableGenerator extends Generator
                 }
             }
         }
+
+        // Allow plugins to modify the values
+        $event = new DefineGeneratorValuesEvent([
+            'values' => $values,
+        ]);
+        Event::trigger(self::class, self::EVENT_BEFORE_GENERATE, $event);
+        $values = $event->values;
 
         // Format the line output for each value
         foreach ($values as $key => $value) {

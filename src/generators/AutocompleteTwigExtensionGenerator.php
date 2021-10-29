@@ -16,6 +16,8 @@ use nystudio107\autocomplete\base\Generator;
 
 use Craft;
 use craft\base\Element;
+use nystudio107\autocomplete\events\DefineGeneratorValuesEvent;
+use yii\base\Event;
 
 /**
  * @author    nystudio107
@@ -24,7 +26,7 @@ use craft\base\Element;
  */
 class AutocompleteTwigExtensionGenerator extends Generator
 {
-    // const
+    // Constants
     // =========================================================================
 
     const COMMERCE_PLUGIN_HANDLE = 'commerce';
@@ -104,16 +106,26 @@ class AutocompleteTwigExtensionGenerator extends Generator
                     break;
             }
         }
+
         // Mix in element route variables, and override values that should be used for autocompletion
         $values = array_merge(
             $values,
             static::elementRouteVariables(),
             static::overrideValues()
         );
+
+        // Allow plugins to modify the values
+        $event = new DefineGeneratorValuesEvent([
+            'values' => $values,
+        ]);
+        Event::trigger(self::class, self::EVENT_BEFORE_GENERATE, $event);
+        $values = $event->values;
+
         // Format the line output for each value
         foreach ($values as $key => $value) {
             $values[$key] = "            '" . $key . "' => " . $value . ",";
         }
+
         // Save the template with variable substitution
         self::saveTemplate([
             '{{ globals }}' => implode(PHP_EOL, $values),
