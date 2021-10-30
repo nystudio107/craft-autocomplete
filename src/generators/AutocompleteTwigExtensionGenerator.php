@@ -13,10 +13,11 @@
 namespace nystudio107\autocomplete\generators;
 
 use nystudio107\autocomplete\base\Generator;
+use nystudio107\autocomplete\events\DefineGeneratorValuesEvent;
 
 use Craft;
 use craft\base\Element;
-use nystudio107\autocomplete\events\DefineGeneratorValuesEvent;
+
 use yii\base\Event;
 
 /**
@@ -28,8 +29,6 @@ class AutocompleteTwigExtensionGenerator extends Generator
 {
     // Constants
     // =========================================================================
-
-    const COMMERCE_PLUGIN_HANDLE = 'commerce';
 
     const ELEMENT_ROUTE_EXCLUDES = [
         'matrixblock',
