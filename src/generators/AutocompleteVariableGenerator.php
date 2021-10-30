@@ -13,12 +13,11 @@
 namespace nystudio107\autocomplete\generators;
 
 use nystudio107\autocomplete\base\Generator;
+use nystudio107\autocomplete\events\DefineGeneratorValuesEvent;
 
 use Craft;
 use craft\web\twig\variables\CraftVariable;
 
-use nystudio107\autocomplete\events\DefineGeneratorValuesEvent;
-use Throwable;
 use yii\base\Event;
 
 /**
@@ -29,7 +28,7 @@ use yii\base\Event;
 class AutocompleteVariableGenerator extends Generator
 {
 
-    // const
+    // Constants
     // =========================================================================
 
     const BEHAVIOR_PROPERTY_EXCLUDES = [
@@ -83,7 +82,7 @@ class AutocompleteVariableGenerator extends Generator
             foreach ($craftVariable->getComponents() as $key => $value) {
                 try {
                     $values[$key] = get_class($craftVariable->get($key));
-                } catch (Throwable $e) {
+                } catch (\Throwable $e) {
                     // That's okay
                 }
             }
