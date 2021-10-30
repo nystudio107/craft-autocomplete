@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 ## 1.0.5 - Unreleased
 ### Added
 * feat: Added the `beforeGenerate` event to the base `Generator` class ([#7](https://github.com/nystudio107/craft-autocomplete/issues/7)).
-* 
+
 ## 1.0.4 - 2021.10.21
 ### Added
 * feat: Added support for plugins like Craft Commerce that add to the Craft variable via behaviors ([#6](https://github.com/nystudio107/craft-autocomplete/issues/6))
