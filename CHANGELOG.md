@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.0.6 - 2021.11.17
+### Fixed
+* Fixed an issue that prevented Globals from being included in the generated autocomplete class ([#8](https://github.com/nystudio107/craft-autocomplete/issues/8))
+
 ## 1.0.5 - 2021.10.30
 ### Added
 * Added the `beforeGenerate` event to the base `Generator` class ([#7](https://github.com/nystudio107/craft-autocomplete/issues/7)).
