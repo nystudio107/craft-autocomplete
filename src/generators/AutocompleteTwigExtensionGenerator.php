@@ -17,6 +17,7 @@ use nystudio107\autocomplete\events\DefineGeneratorValuesEvent;
 
 use Craft;
 use craft\base\Element;
+use craft\web\twig\GlobalsExtension;
 
 use yii\base\Event;
 
@@ -110,6 +111,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
         $values = array_merge(
             $values,
             static::elementRouteVariables(),
+            static::globalVariables(),
             static::overrideValues()
         );
 
@@ -149,6 +151,23 @@ class AutocompleteTwigExtensionGenerator extends Generator
         }
 
         return $routeVariables;
+    }
+
+    /**
+     * Add in the global variables manually, because Craft conditionally loads the GlobalsExtension as of
+     * Craft CMS 3.7.8 only for frontend routes
+     *
+     * @return array
+     */
+    private static function globalVariables(): array
+    {
+        $globalVariables = [];
+        $globalsExtension = new GlobalsExtension();
+        foreach ($globalsExtension->getGlobals() as $key => $value) {
+            $globalVariables[$key] = 'new \\' . get_class($value) . '()';
+        }
+
+        return $globalVariables;
     }
 
     /**
