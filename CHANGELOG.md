@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.0.7 - 2021.11.18
+### Fixed
+* Fixed a regression that would cause Autocomplete to throw an exception on < Craft CMS 3.7.8
+
 ## 1.0.6 - 2021.11.17
 ### Fixed
 * Fixed an issue that prevented Globals from being included in the generated autocomplete class ([#8](https://github.com/nystudio107/craft-autocomplete/issues/8))
