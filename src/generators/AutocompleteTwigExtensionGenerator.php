@@ -162,9 +162,18 @@ class AutocompleteTwigExtensionGenerator extends Generator
     private static function globalVariables(): array
     {
         $globalVariables = [];
-        $globalsExtension = new GlobalsExtension();
-        foreach ($globalsExtension->getGlobals() as $key => $value) {
-            $globalVariables[$key] = 'new \\' . get_class($value) . '()';
+        // See if the GlobalsExtension class is available (Craft CMS 3.7.8 or later) and use it
+        if (class_exists(GlobalsExtension::class)) {
+            $globalsExtension = new GlobalsExtension();
+            foreach ($globalsExtension->getGlobals() as $key => $value) {
+                $globalVariables[$key] = 'new \\' . get_class($value) . '()';
+            }
+
+            return $globalVariables;
+        }
+        // Fall back and get the globals ourselves
+        foreach (Craft::$app->getGlobals()->getAllSets() as $globalSet) {
+            $globalVariables[$globalSet->handle] = 'new \\' . get_class($globalSet) . '()';
         }
 
         return $globalVariables;
