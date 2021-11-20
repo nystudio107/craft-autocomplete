@@ -82,7 +82,7 @@ abstract class Generator implements GeneratorInterface
      */
     public static function delete()
     {
-        unlink(static::getGeneratedFilePath());
+        @unlink(static::getGeneratedFilePath());
     }
 
     // Protected Static Methods
