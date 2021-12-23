@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.0.9 - 2021.12.23
+### Changed
+* Check to see if a file exists via `is_file()` before attempting to delete it with `unlink()`
+
+## 1.0.8 - 2021.11.20
+### Changed
+*  Suppress errors when attempting to delete generator files that may or may not exist
+
 ## 1.0.7 - 2021.11.18
 ### Fixed
 * Fixed a regression that would cause Autocomplete to throw an exception on < Craft CMS 3.7.8
