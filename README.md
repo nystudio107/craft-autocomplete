@@ -24,7 +24,7 @@ composer require nystudio107/craft-autocomplete --dev
 ```
 
 2. Ensure that the [Symfony Support plugin](https://plugins.jetbrains.com/plugin/7219-symfony-plugin) for PhpStorm is installed and enabled by checking the **Enabled for Project** checkbox in the Symfony plugin settings.  
-    
+
 3. Ensure that `devMode` is enabled.
 
 4. Visit the Craft site on which the package is installed to generate the autocomplete classes in `storage/runtime/compiled_classes/` or run the following console command.
@@ -60,6 +60,21 @@ php craft clear-caches/temp-files
 ```
 
 ## Extending
+
+You can extend the values that a `Generator` class adds using the `EVENT_BEFORE_GENERATE` event.
+
+```php
+use nystudio107\autocomplete\events\DefineGeneratorValuesEvent;
+use nystudio107\autocomplete\generators\AutocompleteTwigExtensionGenerator;
+use yii\base\Event;
+
+Event::on(AutocompleteTwigExtensionGenerator::class,
+    AutocompleteTwigExtensionGenerator::EVENT_BEFORE_GENERATE,
+    function(DefineGeneratorValuesEvent $event) {
+        $event->values['myVariable'] = 'value';
+    }
+);
+```
 
 In addition to the provided autocomplete generator types, you can write your own by implementing the `GeneratorInterface` class or extending the abstract `Generator` class (recommended).
 
