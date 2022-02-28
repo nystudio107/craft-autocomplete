@@ -12,9 +12,8 @@
 
 namespace nystudio107\autocomplete\base;
 
-use nystudio107\autocomplete\Autocomplete;
-
 use Craft;
+use nystudio107\autocomplete\Autocomplete;
 
 /**
  * @author    nystudio107

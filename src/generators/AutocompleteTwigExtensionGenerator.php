@@ -12,13 +12,11 @@
 
 namespace nystudio107\autocomplete\generators;
 
-use nystudio107\autocomplete\base\Generator;
-use nystudio107\autocomplete\events\DefineGeneratorValuesEvent;
-
 use Craft;
 use craft\base\Element;
 use craft\web\twig\GlobalsExtension;
-
+use nystudio107\autocomplete\base\Generator;
+use nystudio107\autocomplete\events\DefineGeneratorValuesEvent;
 use yii\base\Event;
 
 /**
