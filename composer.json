@@ -14,8 +14,9 @@
     "complete"
   ],
   "support": {
-    "docs": "https://github.com/nystudio107/craft-autocomplete/blob/master/README.md",
-    "issues": "https://github.com/nystudio107/craft-autocomplete/issues"
+    "docs": "https://github.com/nystudio107/craft-autocomplete/blob/v1/README.md",
+    "issues": "https://github.com/nystudio107/craft-autocomplete/issues",
+    "source": "https://github.com/nystudio107/craft-autocomplete"
   },
   "license": "MIT",
   "authors": [
