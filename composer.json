@@ -1,42 +1,42 @@
 {
-    "name": "nystudio107/craft-autocomplete",
-    "description": "Provides Twig template IDE autocomplete of Craft CMS & plugin variables",
-    "type": "yii2-extension",
-    "version": "1.0.9",
-    "keywords": [
-        "craft",
-        "cms",
-        "craftcms",
-        "twig",
-        "symfony",
-        "autocomplete",
-        "auto",
-        "complete"
-    ],
-    "support": {
-        "docs": "https://github.com/nystudio107/craft-autocomplete/blob/master/README.md",
-        "issues": "https://github.com/nystudio107/craft-autocomplete/issues"
+  "name": "nystudio107/craft-autocomplete",
+  "description": "Provides Twig template IDE autocomplete of Craft CMS & plugin variables",
+  "type": "yii2-extension",
+  "version": "1.10.0",
+  "keywords": [
+    "craft",
+    "cms",
+    "craftcms",
+    "twig",
+    "symfony",
+    "autocomplete",
+    "auto",
+    "complete"
+  ],
+  "support": {
+    "docs": "https://github.com/nystudio107/craft-autocomplete/blob/master/README.md",
+    "issues": "https://github.com/nystudio107/craft-autocomplete/issues"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "nystudio107",
+      "homepage": "https://nystudio107.com"
     },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "nystudio107",
-            "homepage": "https://nystudio107.com"
-        },
-        {
-            "name": "PutYourLightsOn",
-            "homepage": "https://putyourlightson.com"
-        }
-    ],
-    "require": {
-        "craftcms/cms": "^3.0.0"
-    },
-    "autoload": {
-        "psr-4": {
-          "nystudio107\\autocomplete\\": "src/"
-        }
-    },
-    "extra": {
-        "bootstrap": "nystudio107\\autocomplete\\Autocomplete"
+    {
+      "name": "PutYourLightsOn",
+      "homepage": "https://putyourlightson.com"
     }
+  ],
+  "require": {
+    "craftcms/cms": "^3.0.0 || ^4.0.0-alpha"
+  },
+  "autoload": {
+    "psr-4": {
+      "nystudio107\\autocomplete\\": "src/"
+    }
+  },
+  "extra": {
+    "bootstrap": "nystudio107\\autocomplete\\Autocomplete"
+  }
 }
