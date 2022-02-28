@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.10.0 - 2022.02.27
+### Added
+* Added compatibility with Craft CMS `^4.0.0` and Craft CMS `^3.0.0`
+* Added `CODEOWNERS`
+
+### Changed
+* Code refactor/reformat
+
 ## 1.0.9 - 2021.12.23
 ### Changed
 * Check to see if a file exists via `is_file()` before attempting to delete it with `unlink()`
