@@ -13,7 +13,6 @@
 namespace nystudio107\autocomplete\console\controllers;
 
 use nystudio107\autocomplete\Autocomplete;
-
 use yii\console\Controller;
 use yii\console\ExitCode;
 use yii\helpers\BaseConsole;
