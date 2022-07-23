@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.10.1 - 2022.08.23
+### Changed
+* Add `allow-plugins` to `composer.json` so CI can work
+
+### Fixed
+* Fixed an issue where an exception could be thrown during the bootstrap process in earlier versions of Yii2 due to `$id` not being set
+
 ## 1.10.0 - 2022.02.27
 ### Added
 * Added compatibility with Craft CMS `^4.0.0` and Craft CMS `^3.0.0`
