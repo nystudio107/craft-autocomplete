@@ -41,6 +41,8 @@ class Autocomplete extends Module implements BootstrapInterface
     // Constants
     // =========================================================================
 
+    const ID = 'craft-autocomplete';
+
     /**
      * @event RegisterComponentTypesEvent The event that is triggered when registering
      *        Autocomplete Generator types
@@ -75,6 +77,19 @@ class Autocomplete extends Module implements BootstrapInterface
 
     // Public Methods
     // =========================================================================
+
+    /**
+     * @inerhitdoc
+     */
+    public function __construct($id = self::ID, $parent = null, $config = [])
+    {
+        /**
+         * Explicitly set the $id parameter, as earlier versions of Yii2 look for a
+         * default parameter, and depend on $id being explicitly set:
+         * https://github.com/yiisoft/yii2/blob/f3d1534125c9c3dfe8fa65c28a4be5baa822e721/framework/di/Container.php#L436-L448
+         */
+        parent::__construct($id, $parent, $config);
+    }
 
     /**
      * Bootstraps the extension
