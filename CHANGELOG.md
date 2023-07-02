@@ -2,13 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.11.1 - 2023.07.03
+### Fixed
+* Fixed an issue in which the plugin was instantiating Twig before Craft was fully initialized.
+
 ## 1.11.0 - 2022.12.19
 ### Changed
 * Refactored how CraftVariable Behaviors are parsed to use PHP Reflection so we can get all methods & properties added via behavior to the CraftVariable. Allows `craft.orders()` to work, for example ([#10](https://github.com/nystudio107/craft-autocomplete/issues/10))
 
 ## 1.10.1 - 2022.08.23
 ### Changed
-* Add `allow-plugins` to `composer.json` so CI can work
+* Added `allow-plugins` to `composer.json` so CI can work
 
 ### Fixed
 * Fixed an issue where an exception could be thrown during the bootstrap process in earlier versions of Yii2 due to `$id` not being set
