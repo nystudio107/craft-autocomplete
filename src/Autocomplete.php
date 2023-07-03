@@ -128,7 +128,7 @@ class Autocomplete extends Module implements BootstrapInterface
         Event::on(Plugins::class, Plugins::EVENT_AFTER_INSTALL_PLUGIN, [$this, 'regenerateAutocompleteClasses']);
         Event::on(Plugins::class, Plugins::EVENT_AFTER_UNINSTALL_PLUGIN, [$this, 'deleteAutocompleteClasses']);
         Event::on(Globals::class, Globals::EVENT_AFTER_SAVE_GLOBAL_SET, [$this, 'deleteAutocompleteClasses']);
-        Event::on(Plugins::class, Plugins::EVENT_AFTER_LOAD_PLUGINS, [$this, 'generateAutocompleteClasses']);
+        Event::on(CraftWebApp::class, CraftWebApp::EVENT_INIT, [$this, 'generateAutocompleteClasses']);
         Craft::info('Event Handlers installed', __METHOD__);
     }
 
