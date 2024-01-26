@@ -2,7 +2,7 @@
   "name": "nystudio107/craft-autocomplete",
   "description": "Provides Twig template IDE autocomplete of Craft CMS & plugin variables",
   "type": "yii2-extension",
-  "version": "1.11.1",
+  "version": "1.2.0",
   "keywords": [
     "craft",
     "cms",
@@ -30,7 +30,7 @@
     }
   ],
   "require": {
-    "craftcms/cms": "^3.0.0 || ^4.0.0-alpha"
+    "craftcms/cms": "^3.0.0 || ^4.0.0 || ^5.0.0-alpha.1"
   },
   "config": {
     "allow-plugins": {
