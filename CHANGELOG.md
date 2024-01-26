@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.2.0 - 2024.01.25
+### Added
+* Added support for Craft CMS 5
+
 ## 1.11.1 - 2023.07.03
 ### Fixed
 * Fixed an issue in which the plugin was instantiating Twig before Craft was fully initialized.
