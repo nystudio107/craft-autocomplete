@@ -18,6 +18,7 @@ use nystudio107\autocomplete\base\Generator;
 use nystudio107\autocomplete\events\DefineGeneratorValuesEvent;
 use ReflectionClass;
 use ReflectionMethod;
+use ReflectionNamedType;
 use ReflectionProperty;
 use Throwable;
 use yii\base\Event;
@@ -66,13 +67,13 @@ class AutocompleteVariableGenerator extends Generator
         static::generateInternal();
     }
 
-    // Private Static Methods
+    // Protected Static Methods
     // =========================================================================
 
     /**
      * Core function that generates the autocomplete class
      */
-    private static function generateInternal()
+    protected static function generateInternal()
     {
         $properties = [];
         $methods = [];
@@ -95,52 +96,48 @@ class AutocompleteVariableGenerator extends Generator
                     $reflect = new ReflectionClass($behavior);
                     // Properties
                     foreach ($reflect->getProperties(ReflectionProperty::IS_PUBLIC) as $reflectProp) {
-                        if ($reflectProp) {
-                            // Property name
-                            $reflectPropName = $reflectProp->getName();
-                            // Ensure the property exists only for this class and not any parent class
-                            if (property_exists(get_parent_class($behavior), $reflectPropName)) {
-                                continue;
-                            }
-                            // Do it this way because getType() reflection method is >= PHP 7.4
-                            $reflectPropType = gettype($behavior->$reflectPropName);
-                            switch ($reflectPropType) {
-                                case 'object':
-                                    $properties[$reflectPropName] = get_class($behavior->$reflectPropName);
-                                    break;
-                                default:
-                                    $properties[$reflectPropName] = $reflectPropType;
-                                    break;
-                            }
+                        // Property name
+                        $reflectPropName = $reflectProp->getName();
+                        // Ensure the property exists only for this class and not any parent class
+                        if (property_exists(get_parent_class($behavior), $reflectPropName)) {
+                            continue;
+                        }
+                        // Do it this way because getType() reflection method is >= PHP 7.4
+                        $reflectPropType = gettype($behavior->$reflectPropName);
+                        switch ($reflectPropType) {
+                            case 'object':
+                                $properties[$reflectPropName] = get_class($behavior->$reflectPropName);
+                                break;
+                            default:
+                                $properties[$reflectPropName] = $reflectPropType;
+                                break;
                         }
                     }
                     // Methods
                     foreach ($reflect->getMethods(ReflectionMethod::IS_PUBLIC) as $reflectMethod) {
-                        if ($reflectMethod) {
-                            // Method name
-                            $reflectMethodName = $reflectMethod->getName();
-                            // Ensure the method exists only for this class and not any parent class
-                            if (method_exists(get_parent_class($behavior), $reflectMethodName)) {
-                                continue;
-                            }
-                            // Method return type
-                            $methodReturn = '';
-                            $reflectMethodReturnType = $reflectMethod->getReturnType();
-                            if ($reflectMethodReturnType) {
-                                $methodReturn = ': ' . $reflectMethodReturnType->getName();
-                            }
-                            // Method parameters
-                            $methodParams = [];
-                            foreach ($reflectMethod->getParameters() as $methodParam) {
-                                $paramType = '';
-                                $methodParamType = $methodParam->getType();
-                                if ($methodParamType) {
-                                    $paramType = $methodParamType . ' ';
-                                }
-                                $methodParams[] = $paramType . '$' . $methodParam->getName();
-                            }
-                            $methods[$reflectMethodName] = '(' . implode(', ', $methodParams) . ')' . $methodReturn;
+                        // Method name
+                        $reflectMethodName = $reflectMethod->getName();
+                        // Ensure the method exists only for this class and not any parent class
+                        if (method_exists(get_parent_class($behavior), $reflectMethodName)) {
+                            continue;
                         }
+                        // Method return type
+                        $methodReturn = '';
+                        $reflectMethodReturnType = $reflectMethod->getReturnType();
+                        if ($reflectMethodReturnType instanceof ReflectionNamedType) {
+                            $methodReturn = ': ' . $reflectMethodReturnType->getName();
+                        }
+                        // Method parameters
+                        $methodParams = [];
+                        foreach ($reflectMethod->getParameters() as $methodParam) {
+                            $paramType = '';
+                            $methodParamType = $methodParam->getType();
+                            if ($methodParamType) {
+                                $paramType = $methodParamType . ' ';
+                            }
+                            $methodParams[] = $paramType . '$' . $methodParam->getName();
+                        }
+                        $methods[$reflectMethodName] = '(' . implode(', ', $methodParams) . ')' . $methodReturn;
                     }
                 } catch (\ReflectionException $e) {
                 }

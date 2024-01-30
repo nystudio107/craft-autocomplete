@@ -63,13 +63,13 @@ class AutocompleteTwigExtensionGenerator extends Generator
         self::generateInternal();
     }
 
-    // Private Static Methods
+    // Protected Static Methods
     // =========================================================================
 
     /**
      * Core function that generates the autocomplete class
      */
-    private static function generateInternal()
+    protected static function generateInternal()
     {
         $values = [];
         // Iterate through the globals in the Twig context
@@ -136,7 +136,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
      *
      * @return array
      */
-    private static function elementRouteVariables(): array
+    protected static function elementRouteVariables(): array
     {
         $routeVariables = [];
         $elementTypes = Craft::$app->elements->getAllElementTypes();
@@ -157,7 +157,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
      *
      * @return array
      */
-    private static function globalVariables(): array
+    protected static function globalVariables(): array
     {
         $globalVariables = [];
         // See if the GlobalsExtension class is available (Craft CMS 3.7.8 or later) and use it
@@ -182,7 +182,7 @@ class AutocompleteTwigExtensionGenerator extends Generator
      *
      * @return array
      */
-    private static function overrideValues(): array
+    protected static function overrideValues(): array
     {
         return [
             // Swap in our variable in place of the `craft` variable
