@@ -30,11 +30,10 @@ use yii\base\Event;
  */
 class AutocompleteVariableGenerator extends Generator
 {
-
     // Constants
     // =========================================================================
 
-    const BEHAVIOR_PROPERTY_EXCLUDES = [
+    public const BEHAVIOR_PROPERTY_EXCLUDES = [
         'owner',
     ];
 

@@ -22,9 +22,9 @@ interface GeneratorInterface
     // Constants
     // =========================================================================
 
-    const TEMPLATE_EXTENSION = '.php';
-    const STUBS_EXTENSION = '.php.stub';
-    const STUBS_DIR = DIRECTORY_SEPARATOR . 'stubs';
+    public const TEMPLATE_EXTENSION = '.php';
+    public const STUBS_EXTENSION = '.php.stub';
+    public const STUBS_DIR = DIRECTORY_SEPARATOR . 'stubs';
 
     // Public Static Methods
     // =========================================================================

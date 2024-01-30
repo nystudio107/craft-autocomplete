@@ -41,7 +41,7 @@ class Autocomplete extends Module implements BootstrapInterface
     // Constants
     // =========================================================================
 
-    const ID = 'craft-autocomplete';
+    public const ID = 'craft-autocomplete';
 
     /**
      * @event RegisterComponentTypesEvent The event that is triggered when registering
@@ -63,9 +63,9 @@ class Autocomplete extends Module implements BootstrapInterface
      * );
      * ```
      */
-    const EVENT_REGISTER_AUTOCOMPLETE_GENERATORS = 'registerAutocompleteGenerators';
+    public const EVENT_REGISTER_AUTOCOMPLETE_GENERATORS = 'registerAutocompleteGenerators';
 
-    const DEFAULT_AUTOCOMPLETE_GENERATORS = [
+    public const DEFAULT_AUTOCOMPLETE_GENERATORS = [
         AutocompleteVariableGenerator::class,
         AutocompleteTwigExtensionGenerator::class,
     ];
@@ -186,7 +186,7 @@ class Autocomplete extends Module implements BootstrapInterface
         }
 
         $event = new RegisterComponentTypesEvent([
-            'types' => self::DEFAULT_AUTOCOMPLETE_GENERATORS
+            'types' => self::DEFAULT_AUTOCOMPLETE_GENERATORS,
         ]);
         $this->trigger(self::EVENT_REGISTER_AUTOCOMPLETE_GENERATORS, $event);
         $this->allAutocompleteGenerators = $event->types;

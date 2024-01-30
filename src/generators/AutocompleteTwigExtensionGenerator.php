@@ -29,9 +29,9 @@ class AutocompleteTwigExtensionGenerator extends Generator
     // Constants
     // =========================================================================
 
-    const ELEMENT_ROUTE_EXCLUDES = [
+    public const ELEMENT_ROUTE_EXCLUDES = [
         'matrixblock',
-        'globalset'
+        'globalset',
     ];
 
     // Public Static Methods

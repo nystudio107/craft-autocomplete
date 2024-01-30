@@ -41,7 +41,7 @@ abstract class Generator implements GeneratorInterface
      * );
      * ```
      */
-    const EVENT_BEFORE_GENERATE = 'beforeGenerate';
+    public const EVENT_BEFORE_GENERATE = 'beforeGenerate';
 
     // Public Static Methods
     // =========================================================================
