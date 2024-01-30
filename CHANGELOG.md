@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.12.0 - 2024.01.30
+### Added
+* Add `phpstan` and `ecs` code linting
+* Add `code-analysis.yaml` GitHub action
+
+### Changed
+* PHPstan code cleanup
+* ECS code cleanup
+
 ## 1.12.0 - 2024.01.25
 ### Added
 * Added support for Craft CMS 5
