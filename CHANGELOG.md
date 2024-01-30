@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## 1.12.0 - 2024.01.30
+## 1.12.1 - 2024.01.30
 ### Added
 * Add `phpstan` and `ecs` code linting
 * Add `code-analysis.yaml` GitHub action
