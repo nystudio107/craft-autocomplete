@@ -15,9 +15,9 @@ jobs:
       matrix:
         actions:
           - name: 'PHPStan'
-            run: phpstan
+            run: composer phpstan
           - name: 'Coding Standards'
-            run: fix-cs
+            run: composer fix-cs
     name: ${{ matrix.actions.name }}
     runs-on: ubuntu-latest
     steps:
@@ -27,8 +27,9 @@ jobs:
         with:
           path: /tmp/composer-cache
           key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
-      - uses: php-actions/composer@v6
+      - name: Composer action
+        uses: php-actions/composer@v6
         with:
           php_version: "8.2"
           php_extensions: ctype curl dom iconv imagick intl json mbstring openssl pcre pdo reflection spl zip
-          command: ${{ matrix.actions.run }}
+        run: ${{ matrix.actions.run }}
