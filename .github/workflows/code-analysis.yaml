@@ -27,9 +27,14 @@ jobs:
         with:
           path: /tmp/composer-cache
           key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
-      - name: Composer action
-        uses: php-actions/composer@v6
+      - name: Setup PHP
+        id: setup-php
+        uses: shivammathur/setup-php@v2
         with:
-          php_version: "8.2"
-          php_extensions: ctype curl dom iconv imagick intl json mbstring openssl pcre pdo reflection spl zip
-        run: ${{ matrix.actions.run }}
+          php-version: 8.2
+          extensions: 'ctype,curl,dom,iconv,imagick,intl,json,mbstring,openssl,pcre,pdo,reflection,spl,zip'
+          ini-values: post_max_size=256M, max_execution_time=180, memory_limit=512M
+          tools: composer:v2
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-ansi --no-progress
+      - run: ${{ matrix.actions.run }}
