@@ -15,9 +15,9 @@ jobs:
       matrix:
         actions:
           - name: 'PHPStan'
-            run: composer phpstan
+            run: phpstan
           - name: 'Coding Standards'
-            run: composer fix-cs
+            run: fix-cs
     name: ${{ matrix.actions.name }}
     runs-on: ubuntu-latest
     steps:
