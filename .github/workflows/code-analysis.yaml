@@ -14,21 +14,21 @@ jobs:
       fail-fast: false
       matrix:
         actions:
-          -
-            name: 'PHPStan'
+          - name: 'PHPStan'
             run: composer phpstan
-          -
-            name: 'Coding Standards'
+          - name: 'Coding Standards'
             run: composer fix-cs
     name: ${{ matrix.actions.name }}
     runs-on: ubuntu-latest
     steps:
-      -   uses: actions/checkout@v4
-      # see https://github.com/shivammathur/setup-php
-      -   uses: shivammathur/setup-php@v2
-          with:
-            php-version: 8.2
-            coverage: none
-      # composer install cache - https://github.com/ramsey/composer-install
-      -   uses: "ramsey/composer-install@v2"
-      -   run: ${{ matrix.actions.run }}
+      - uses: actions/checkout@v4
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+      - uses: php-actions/composer@v6
+        with:
+          php_version: 8.2
+          php_extensions: ctype curl dom iconv imagick intl json mbstring openssl pcre pdo reflection spl zip
+      - run: ${{ matrix.actions.run }}
