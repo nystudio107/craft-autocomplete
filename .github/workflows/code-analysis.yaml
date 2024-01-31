@@ -29,6 +29,6 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
       - uses: php-actions/composer@v6
         with:
-          php_version: 8.2
+          php_version: "8.2"
           php_extensions: ctype curl dom iconv imagick intl json mbstring openssl pcre pdo reflection spl zip
       - run: ${{ matrix.actions.run }}
