@@ -31,4 +31,4 @@ jobs:
         with:
           php_version: "8.2"
           php_extensions: ctype curl dom iconv imagick intl json mbstring openssl pcre pdo reflection spl zip
-      - run: ${{ matrix.actions.run }}
+          command: ${{ matrix.actions.run }}
