@@ -1,13 +1,13 @@
 <?php
 /**
- * Autocomplete plugin for Craft CMS 3.x
+ * Autocomplete module for Craft CMS
  *
  * Provides Twig template IDE autocomplete of Craft CMS & plugin variables
  *
  * @link      https://nystudio107.com
  * @link      https://putyourlightson.com
- * @copyright Copyright (c) 2021 nystudio107
- * @copyright Copyright (c) 2021 PutYourLightsOn
+ * @copyright Copyright (c) nystudio107
+ * @copyright Copyright (c) PutYourLightsOn
  */
 
 namespace nystudio107\autocomplete\events;
