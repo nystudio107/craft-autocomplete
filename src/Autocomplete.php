@@ -137,12 +137,14 @@ class Autocomplete extends Module implements BootstrapInterface
      */
     public function generateAutocompleteClasses()
     {
-        $autocompleteGenerators = $this->getAllAutocompleteGenerators();
-        foreach ($autocompleteGenerators as $generatorClass) {
-            /* @var Generator $generatorClass */
-            $generatorClass::generate();
+        if (Craft::$app->getIsInstalled()) {
+            $autocompleteGenerators = $this->getAllAutocompleteGenerators();
+            foreach ($autocompleteGenerators as $generatorClass) {
+                /* @var Generator $generatorClass */
+                $generatorClass::generate();
+            }
+            Craft::info('Autocomplete classes generated', __METHOD__);
         }
-        Craft::info('Autocomplete classes generated', __METHOD__);
     }
 
     /**
